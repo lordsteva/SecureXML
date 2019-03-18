@@ -24,6 +24,8 @@ function refreshToken(){
 }
 
 $(document).ready(function () {
+	datefrom.min = new Date().toISOString().split("T")[0];
+	dateto.min = new Date().toISOString().split("T")[0];
 
 	setInterval(refreshToken, 60000); //svaki min
     addButtonListeners();
@@ -34,20 +36,32 @@ adjust_body_offset();
 
 function addButtonListeners() {
 
-	$('#submitcreate').click(function() {
+	$('#formcr').submit(function(e) {
+		e.preventDefault();
         var d = {};
         d.country = $("input[id='country']").val();
         d.state = $("input[id='state']").val();
-        d.locality = $("input[id='locality']").val();
+        d.localityName = $("input[id='locality']").val();
         d.organization = $("input[id='organization']").val();
-        d.orgunit = $("input[id='orgunit']").val();
-        d.common = $("input[id='common']").val();
+        d.organizationalUnitName = $("input[id='orgunit']").val();
+        d.commonName = $("input[id='common']").val();
         d.email = $("input[id='email']").val();
-        d.password = $("input[id='password']").val();
-        d.company = $("input[id='company']").val();
-        d.keyfield = $("#keyfield").val();
+        //d.password = $("input[id='password']").val();
+        //d.company = $("input[id='company']").val();
+        d.startDate = $("input[id='datefrom']").val();
+        d.endDate = $("input[id='dateto']").val();
+        if($('#selfsigned').is(':checked')){
+			d.issuerId=null;
+        }else{
+			d.issuerId=$('select[name="issuerselect"]').val();
+        }
+        if($('#ca').is(':checked')){
+			d.ca=true;
+        }else{
+			d.ca=false;
+        }
         $.ajax({
-            url : '/createcertificate',
+            url : '/certificate/create',
             type : 'post',
             data : JSON.stringify(d),
             success : function(data) {
@@ -58,6 +72,14 @@ function addButtonListeners() {
             },
         });
     });
+
+    $('#selfsigned').click(function(){
+	    if($(this).is(':checked')){
+	        $('#choose_issuer').hide();
+	    } else {
+	        $('#choose_issuer').show();
+	    }
+	});
 }
 
 function adjust_body_offset() {
