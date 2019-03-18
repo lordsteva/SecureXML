@@ -75,8 +75,6 @@ public class GenerateCertificateService {
 		//znaci da je self signed, isuer je isto kao i subject
 		if(certificate.getIssuerId()==null) {
 			builder.addRDN(BCStyle.CN, certificate.getCommonName());
-		    builder.addRDN(BCStyle.SURNAME, certificate.getSurname());
-		    builder.addRDN(BCStyle.GIVENNAME, certificate.getGivenName());
 		    builder.addRDN(BCStyle.O, certificate.getOrganization());
 		    builder.addRDN(BCStyle.OU, certificate.getOrganizationalUnitName());
 		    builder.addRDN(BCStyle.C, certificate.getCountry());
@@ -106,8 +104,6 @@ public class GenerateCertificateService {
 			//klasa X500NameBuilder pravi X500Name objekat koji predstavlja podatke o vlasniku
 			X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
 		    builder.addRDN(BCStyle.CN, certificate.getCommonName());
-		    builder.addRDN(BCStyle.SURNAME, certificate.getSurname());
-		    builder.addRDN(BCStyle.GIVENNAME, certificate.getGivenName());
 		    builder.addRDN(BCStyle.O, certificate.getOrganization());
 		    builder.addRDN(BCStyle.OU, certificate.getOrganizationalUnitName());
 		    builder.addRDN(BCStyle.C, certificate.getCountry());

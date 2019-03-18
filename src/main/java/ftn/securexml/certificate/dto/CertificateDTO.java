@@ -7,8 +7,6 @@ public class CertificateDTO {
 	
 	//Podaci o onome kome izdajemo sertifikat
 	private String commonName;
-	private String surname;
-	private String givenName;
 	private String organization;
 	private String organizationalUnitName;
 	private String country;
@@ -56,14 +54,6 @@ public class CertificateDTO {
 		this.commonName = commonName;
 	}
 
-	public String getGivenName() {
-		return givenName;
-	}
-
-	public void setGivenName(String givenName) {
-		this.givenName = givenName;
-	}
-
 	public String getOrganization() {
 		return organization;
 	}
@@ -94,14 +84,6 @@ public class CertificateDTO {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
 	}
 
 	public String getIssuerId() {
