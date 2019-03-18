@@ -29,10 +29,25 @@ $(document).ready(function () {
 
 	setInterval(refreshToken, 60000); //svaki min
     addButtonListeners();
+    getCertificates();
+
 });
 
 $(window).resize(adjust_body_offset);
 adjust_body_offset();
+
+function getCertificates(){
+	$.ajax({
+        url : '/certificate/getAll',
+        type : 'get',
+        success : function(data) {
+            alert("get all ok");
+        },
+        error : function(data) {
+            alert("get all fail");
+        },
+    });
+}
 
 function addButtonListeners() {
 
