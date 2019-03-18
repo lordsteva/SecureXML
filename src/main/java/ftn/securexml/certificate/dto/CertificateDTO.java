@@ -15,7 +15,16 @@ public class CertificateDTO {
 	private String email;
 	private String localityName;
 	private String state;
+	private boolean ca;
 	
+	public boolean isCa() {
+		return ca;
+	}
+
+	public void setCa(boolean ca) {
+		this.ca = ca;
+	}
+
 	//Podatak o onome ko potpisuje sertifikat (null ako je selfSigned)
 	private String issuerId;
 
