@@ -41,22 +41,27 @@ function addButtonListeners() {
         var d = {};
         d.country = $("input[id='country']").val();
         d.state = $("input[id='state']").val();
-        d.locality = $("input[id='locality']").val();
+        d.localityName = $("input[id='locality']").val();
         d.organization = $("input[id='organization']").val();
-        d.orgunit = $("input[id='orgunit']").val();
-        d.common = $("input[id='common']").val();
+        d.organizationalUnitName = $("input[id='orgunit']").val();
+        d.commonName = $("input[id='common']").val();
         d.email = $("input[id='email']").val();
-        d.password = $("input[id='password']").val();
-        d.company = $("input[id='company']").val();
-        d.datefrom = $("input[id='datefrom']").val();
-        d.dateto = $("input[id='dateto']").val();
+        //d.password = $("input[id='password']").val();
+        //d.company = $("input[id='company']").val();
+        d.startDate = $("input[id='datefrom']").val();
+        d.endDate = $("input[id='dateto']").val();
         if($('#selfsigned').is(':checked')){
-			d.issuer=null;
+			d.issuerId=null;
         }else{
-			d.issuer=$('select[name="issuerselect"]').val();;
+			d.issuerId=$('select[name="issuerselect"]').val();
+        }
+        if($('#ca').is(':checked')){
+			d.ca=true;
+        }else{
+			d.ca=false;
         }
         $.ajax({
-            url : '/create',
+            url : '/certificate/create',
             type : 'post',
             data : JSON.stringify(d),
             success : function(data) {

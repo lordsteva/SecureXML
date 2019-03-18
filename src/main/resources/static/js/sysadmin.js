@@ -36,7 +36,7 @@ function addButtonListeners() {
     
 	$('#create_cer').click(function() {
         $.ajax({
-            url : '/create',
+            url : '/certificate/create',
             type : 'get',
             success : function(data) {
                 window.location.href = data;

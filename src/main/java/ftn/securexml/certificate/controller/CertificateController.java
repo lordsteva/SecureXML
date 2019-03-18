@@ -21,6 +21,11 @@ public class CertificateController {
 	@Autowired
 	private GenerateCertificateService certificateService;
 	
+	@GetMapping("/create")
+	public ResponseEntity<?> addOffice(HttpServletRequest request)
+	{
+	  return ResponseEntity.ok("createcertificate.html");
+	}
 	
 	@PostMapping("/create")
 	public ResponseEntity<?> addOffice(HttpServletRequest request, @RequestBody CertificateDTO certificate)

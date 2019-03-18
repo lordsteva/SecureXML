@@ -59,17 +59,5 @@ public class MainController {
         return new ModelAndView("redirect:" + "index.html");
 	}
 
-	@GetMapping("/create")
-	public ResponseEntity<?> addOffice(HttpServletRequest request)
-	{
-	  return ResponseEntity.ok("createcertificate.html");
-	}
-
-	@PostMapping("/create")
-	public ResponseEntity<?> addcer(HttpServletRequest request)
-	{
-	  return ResponseEntity.ok("createcertificate.html");
-	}
-
 }
 
