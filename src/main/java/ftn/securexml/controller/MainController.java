@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,8 +59,14 @@ public class MainController {
         return new ModelAndView("redirect:" + "index.html");
 	}
 
-	@GetMapping("/createcertificate")
+	@GetMapping("/create")
 	public ResponseEntity<?> addOffice(HttpServletRequest request)
+	{
+	  return ResponseEntity.ok("createcertificate.html");
+	}
+
+	@PostMapping("/create")
+	public ResponseEntity<?> addcer(HttpServletRequest request)
 	{
 	  return ResponseEntity.ok("createcertificate.html");
 	}

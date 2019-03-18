@@ -24,7 +24,7 @@
 		<div class="row">
 			<div class="col-md-3"></div>
 			<div class="col-md-6">
-				<form name="formcreate">
+				<form name="formcreate" id="formcr">
 					<h3>Create certificate</h3>
 					<div class="row">
 						<div class="col-md-5">
@@ -95,22 +95,53 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-12">
+						<div class="col-md-5">
 							<div class="form-group">
-								<label>Key*</label>
-								<button>Generate key</button>
+								<label>Date from*</label>
 								</br>
-								<textarea placeholder="Input or generate key" rows="10" cols="90" required id="keyfield"></textarea>
+								<input id="datefrom" type="date"  class="form-control" required>
 							</div>
+						</div>
+						<div class="col-md-2"></div>
+						<div class="col-md-5">
+							<div class="form-group">
+								<label>Date to*</label>
+								</br>
+								<input id="dateto" type="date"  class="form-control" required>
+							</div>
+						</div>
+					</div>
+					<div class="row" style="background:black;height:1px"></div>
+					</br>
+					<h3>Choose issuer</h3>
+					<div class="row">
+						<div class="col-md-2">
+							Self signed
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" name="selfsigned" id="selfsigned">
+						</div>
+						<div class="col-md-9"></div>
+					</div>
+					<div class="row" id="choose_issuer">
+						<div class="col-md-12">
+							<select name="issuerselect">
+							  <option value="volvo">Volvo volvo volvo</option>
+							  <option value="saab">Saab</option>
+							  <option value="fiat">Fiat</option>
+							  <option value="audi">Audi</option>
+							</select>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-5"></div>
 						<div class="col-md-2">
-							<input type="submit" value="Create" id="submitcreate">
+							<input type="submit" value="Create" id="submitcreate" class="btn btn-dark">
 						</div>
 						<div class="col-md-5"></div>
 					</div>
+					</br>
+					</br>
 				</form>
 			</div>
 			<div class="col-md-3"></div>

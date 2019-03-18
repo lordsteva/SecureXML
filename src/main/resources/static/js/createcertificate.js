@@ -24,6 +24,8 @@ function refreshToken(){
 }
 
 $(document).ready(function () {
+	datefrom.min = new Date().toISOString().split("T")[0];
+	dateto.min = new Date().toISOString().split("T")[0];
 
 	setInterval(refreshToken, 60000); //svaki min
     addButtonListeners();
@@ -34,7 +36,8 @@ adjust_body_offset();
 
 function addButtonListeners() {
 
-	$('#submitcreate').click(function() {
+	$('#formcr').submit(function(e) {
+		e.preventDefault();
         var d = {};
         d.country = $("input[id='country']").val();
         d.state = $("input[id='state']").val();
@@ -45,9 +48,15 @@ function addButtonListeners() {
         d.email = $("input[id='email']").val();
         d.password = $("input[id='password']").val();
         d.company = $("input[id='company']").val();
-        d.keyfield = $("#keyfield").val();
+        d.datefrom = $("input[id='datefrom']").val();
+        d.dateto = $("input[id='dateto']").val();
+        if($('#selfsigned').is(':checked')){
+			d.issuer=null;
+        }else{
+			d.issuer=$('select[name="issuerselect"]').val();;
+        }
         $.ajax({
-            url : '/createcertificate',
+            url : '/create',
             type : 'post',
             data : JSON.stringify(d),
             success : function(data) {
@@ -58,6 +67,14 @@ function addButtonListeners() {
             },
         });
     });
+
+    $('#selfsigned').click(function(){
+	    if($(this).is(':checked')){
+	        $('#choose_issuer').hide();
+	    } else {
+	        $('#choose_issuer').show();
+	    }
+	});
 }
 
 function adjust_body_offset() {
