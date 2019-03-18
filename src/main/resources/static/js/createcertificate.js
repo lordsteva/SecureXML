@@ -61,8 +61,6 @@ function addButtonListeners() {
         d.organizationalUnitName = $("input[id='orgunit']").val();
         d.commonName = $("input[id='common']").val();
         d.email = $("input[id='email']").val();
-        //d.password = $("input[id='password']").val();
-        //d.company = $("input[id='company']").val();
         d.startDate = $("input[id='datefrom']").val();
         d.endDate = $("input[id='dateto']").val();
         if($('#selfsigned').is(':checked')){
@@ -78,6 +76,7 @@ function addButtonListeners() {
         $.ajax({
             url : '/certificate/create',
             type : 'post',
+            contentType : 'application/json',
             data : JSON.stringify(d),
             success : function(data) {
                 alert("uspeo");
