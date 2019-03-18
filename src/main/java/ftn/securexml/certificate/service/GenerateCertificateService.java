@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ft.securexml.certificate.keystores.KeyStoreWriter;
@@ -26,10 +24,9 @@ import ftn.securexml.certificate.generators.KeyGenerator;
 @Service
 public class GenerateCertificateService {
 
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long sertificateId;
+	@Autowired
+	private ftn.securexml.repository.CertificateRepository certificateRepository;
 	
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long userId;
 	
 	public boolean createCertificate(CertificateDTO certificate)
@@ -101,7 +98,7 @@ public class GenerateCertificateService {
 			Date endDate = iso8601Formater.parse(certificate.getEndDate());
 			
 			//Serijski broj sertifikata
-			String sn=sertificateId.toString();
+			String sn=String.valueOf(certificateRepository.findAll().size());
 			
 			//klasa X500NameBuilder pravi X500Name objekat koji predstavlja podatke o vlasniku
 			X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
@@ -116,7 +113,7 @@ public class GenerateCertificateService {
 		    builder.addRDN(BCStyle.L, certificate.getLocalityName());	
 		    
 		    //UID (USER ID) je ID korisnika
-		    builder.addRDN(BCStyle.UID, userId.toString());
+		    builder.addRDN(BCStyle.UID, "654321");
 		    
 		    //Kreiraju se podaci za sertifikat, sto ukljucuje:
 		    // - javni kljuc koji se vezuje za sertifikat

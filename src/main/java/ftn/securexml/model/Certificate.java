@@ -12,14 +12,10 @@ public class Certificate {
 	@Id
 	@Column(name = "certificateId", nullable = false)
 	private String certificateId;
-	
-	@Column(name = "alias", nullable = false)
-	private String alias;
 
-	public Certificate(String certificateId, String alias) {
+	public Certificate(String certificateId) {
 		super();
 		this.certificateId = certificateId;
-		this.alias = alias;
 	}
 
 	public String getCertificateId() {
@@ -29,13 +25,5 @@ public class Certificate {
 	public void setCertificateId(String certificateId) {
 		this.certificateId = certificateId;
 	}
-
-	public String getAlias() {
-		return alias;
-	}
-
-	public void setAlias(String alias) {
-		this.alias = alias;
-	}
-
+	
 }
