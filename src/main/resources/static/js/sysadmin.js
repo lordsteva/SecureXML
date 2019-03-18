@@ -48,7 +48,7 @@ function addButtonListeners() {
     });
     
     $('#show_all').click(function() {
-		alert("tbd");
+		window.location.href = "showAllCertificates.html"
 	});
 
 }

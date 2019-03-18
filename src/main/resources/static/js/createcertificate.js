@@ -78,6 +78,7 @@ function addButtonListeners() {
         $.ajax({
             url : '/certificate/create',
             type : 'post',
+            contentType : 'application/json',
             data : JSON.stringify(d),
             success : function(data) {
                 alert("uspeo");
