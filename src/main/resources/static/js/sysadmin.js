@@ -39,7 +39,7 @@ function addButtonListeners() {
             url : '/createcertificate',
             type : 'get',
             success : function(data) {
-                alert("uspeo");
+                window.location.href = data;
             },
             error : function(data) {
                 alert("nije uspeo");
