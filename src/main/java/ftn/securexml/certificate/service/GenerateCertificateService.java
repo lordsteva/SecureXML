@@ -77,7 +77,8 @@ public class GenerateCertificateService {
 		    builder.addRDN(BCStyle.C, certificate.getCountry());
 		    builder.addRDN(BCStyle.E, certificate.getEmail());	
 		    builder.addRDN(BCStyle.ST, certificate.getState());	
-		    builder.addRDN(BCStyle.L, certificate.getLocalityName());		    
+		    builder.addRDN(BCStyle.L, certificate.getLocalityName());
+		    builder.addRDN(BCStyle.L, String.valueOf(certificate.isCa()));
 
 		    //UID (USER ID) je ID korisnika
 		    builder.addRDN(BCStyle.UID, "654321");
