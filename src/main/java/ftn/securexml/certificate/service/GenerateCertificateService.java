@@ -45,7 +45,10 @@ public class GenerateCertificateService {
 
 		//Serijski broj sertifikata
 		String sn=c.getCertificateId();
-				
+		
+		//Id se generisao prilikom upisa u bazu, setujemo da mozemo da ga upisemo u KeyStore
+		certificate.setId(c.getCertificateId());
+		
 		SubjectData subjectData = generateSubjectData(certificate, keyPairSubject, sn);
 		IssuerData issuerData=null;
 		
@@ -97,7 +100,6 @@ public class GenerateCertificateService {
 
 	private IssuerData generateSelfSignedIssuerData(CertificateDTO certificate, PrivateKey issuerKey) {
 		X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
-
 		//znaci da je self signed, isuer je isto kao i subject
 		if(certificate.getIssuerId()==null) {
 			builder.addRDN(BCStyle.CN, certificate.getCommonName());
@@ -107,6 +109,12 @@ public class GenerateCertificateService {
 		    builder.addRDN(BCStyle.E, certificate.getEmail());	
 		    builder.addRDN(BCStyle.ST, certificate.getState());	
 		    builder.addRDN(BCStyle.L, certificate.getLocalityName());
+		    try {
+			    builder.addRDN(BCStyle.UNIQUE_IDENTIFIER, certificate.getIssuerId());
+		    }
+		    catch (NullPointerException npe) {
+				System.out.println("samopotpisujuci je...");
+			}
 
 		    //UID (USER ID) je ID korisnika
 		    builder.addRDN(BCStyle.UID, "654321");
@@ -133,7 +141,8 @@ public class GenerateCertificateService {
 		    builder.addRDN(BCStyle.E, certificate.getEmail());
 		    builder.addRDN(BCStyle.ST, certificate.getState());	
 		    builder.addRDN(BCStyle.L, certificate.getLocalityName());	
-		    
+		    builder.addRDN(BCStyle.UNIQUE_IDENTIFIER, certificate.getId());
+
 		    //UID (USER ID) je ID korisnika
 		    builder.addRDN(BCStyle.UID, "654321");
 		    
@@ -154,7 +163,8 @@ public class GenerateCertificateService {
 		CertificateDTO cDTO=new CertificateDTO();
         try {
             X500Name subjName = new JcaX509CertificateHolder(cert).getSubject();
-
+            X500Name iss = new JcaX509CertificateHolder(cert).getIssuer();
+            
             RDN cn = subjName.getRDNs(BCStyle.CN)[0];
             String cname = IETFUtils.valueToString(cn.getFirst().getValue());
             cDTO.setCommonName(cname);
@@ -182,10 +192,14 @@ public class GenerateCertificateService {
             RDN en = subjName.getRDNs(BCStyle.E)[0];
             String emname = IETFUtils.valueToString(en.getFirst().getValue());
             cDTO.setEmail(emname);
-
-            cDTO.setId(String.valueOf(((X509Certificate) cert).getSerialNumber()));
-            cDTO.setStartDate(((X509Certificate) cert).getNotBefore().toString());
-            cDTO.setEndDate(((X509Certificate) cert).getNotAfter().toString());
+            
+            RDN issuerId = iss.getRDNs(BCStyle.UNIQUE_IDENTIFIER)[0];
+            String issId = IETFUtils.valueToString(issuerId.getFirst().getValue());
+            cDTO.setIssuerId(issId);
+          
+            cDTO.setId(String.valueOf((cert).getSerialNumber()));
+            cDTO.setStartDate(cert.getNotBefore().toString());
+            cDTO.setEndDate(cert.getNotAfter().toString());
             return cDTO;
            
         } catch (CertificateEncodingException e) {
