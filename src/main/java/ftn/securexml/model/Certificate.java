@@ -2,6 +2,8 @@ package ftn.securexml.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -10,6 +12,7 @@ import javax.persistence.Table;
 public class Certificate {
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "certificateId", nullable = false)
 	private String certificateId;
 
@@ -20,7 +23,7 @@ public class Certificate {
 		
 	}
 
-	public Certificate(String certificateId, boolean isCa) {
+	public Certificate(boolean isCa) {
 		super();
 		this.certificateId = certificateId;
 		this.isCa = isCa;

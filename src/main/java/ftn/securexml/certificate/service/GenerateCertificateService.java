@@ -39,8 +39,12 @@ public class GenerateCertificateService {
 		KeyGenerator kg=new KeyGenerator();
 		KeyPair keyPairSubject = kg.generateKeys();
 		
+		//ubacivanje u bazu napravljenog sertifikata
+		ftn.securexml.model.Certificate c=new ftn.securexml.model.Certificate(certificate.isCa());
+		certificateRepository.save(c);
+
 		//Serijski broj sertifikata
-		String sn=String.valueOf(certificateRepository.findAll().size()+1);
+		String sn=c.getCertificateId();
 				
 		SubjectData subjectData = generateSubjectData(certificate, keyPairSubject, sn);
 		IssuerData issuerData=null;
@@ -66,10 +70,6 @@ public class GenerateCertificateService {
 		ksw.write(cert.getSerialNumber().toString(), keyPairSubject.getPrivate(), "mikimaus".toCharArray(), cert);
 		ksw.saveKeyStore("appkeystore.jks", "mikimaus".toCharArray());
 		
-		//ubacivanje u bazu napravljenog sertifikata
-		ftn.securexml.model.Certificate c=new ftn.securexml.model.Certificate(sn, certificate.isCa());
-		certificateRepository.save(c);
-
 		return true;
 	}
 	
