@@ -34,9 +34,9 @@ public class CertificateController {
 	}
 	
 	@GetMapping("/getAll")
-	public ResponseEntity<?> getAll(HttpServletRequest request)
+	public ResponseEntity<?> getAllCa(HttpServletRequest request)
 	{
-		return ResponseEntity.ok(certificateService.getAll());
+		return ResponseEntity.ok(certificateService.getAllCa());
 	}
 	
 	

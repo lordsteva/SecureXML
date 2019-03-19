@@ -13,9 +13,17 @@ public class Certificate {
 	@Column(name = "certificateId", nullable = false)
 	private String certificateId;
 
-	public Certificate(String certificateId) {
+	@Column(name = "isCa", nullable = false)
+	private boolean isCa;
+	
+	public Certificate() {
+		
+	}
+
+	public Certificate(String certificateId, boolean isCa) {
 		super();
 		this.certificateId = certificateId;
+		this.isCa = isCa;
 	}
 
 	public String getCertificateId() {
@@ -24,6 +32,14 @@ public class Certificate {
 
 	public void setCertificateId(String certificateId) {
 		this.certificateId = certificateId;
+	}
+
+	public boolean isCa() {
+		return isCa;
+	}
+
+	public void setCa(boolean isCa) {
+		this.isCa = isCa;
 	}
 	
 }

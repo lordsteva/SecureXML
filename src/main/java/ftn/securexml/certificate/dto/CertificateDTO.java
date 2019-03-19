@@ -6,6 +6,7 @@ public class CertificateDTO {
 	private String endDate;
 	
 	//Podaci o onome kome izdajemo sertifikat
+	private String id;
 	private String commonName;
 	private String organization;
 	private String organizationalUnitName;
@@ -15,14 +16,6 @@ public class CertificateDTO {
 	private String state;
 	private boolean ca;
 	
-	public boolean isCa() {
-		return ca;
-	}
-
-	public void setCa(boolean ca) {
-		this.ca = ca;
-	}
-
 	//Podatak o onome ko potpisuje sertifikat (null ako je selfSigned)
 	private String issuerId;
 
@@ -109,5 +102,21 @@ public class CertificateDTO {
 	public void setState(String state) {
 		this.state = state;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 	
+	public boolean isCa() {
+		return ca;
+	}
+
+	public void setCa(boolean ca) {
+		this.ca = ca;
+	}
+
 }
