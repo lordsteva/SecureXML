@@ -14,7 +14,7 @@ public class Certificate {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "certificateId", nullable = false)
-	private String certificateId;
+	private Long certificateId;
 
 	@Column(name = "isCa", nullable = false)
 	private boolean isCa;
@@ -25,15 +25,14 @@ public class Certificate {
 
 	public Certificate(boolean isCa) {
 		super();
-		this.certificateId = certificateId;
 		this.isCa = isCa;
 	}
-
-	public String getCertificateId() {
+	
+	public Long getCertificateId() {
 		return certificateId;
 	}
 
-	public void setCertificateId(String certificateId) {
+	public void setCertificateId(Long certificateId) {
 		this.certificateId = certificateId;
 	}
 

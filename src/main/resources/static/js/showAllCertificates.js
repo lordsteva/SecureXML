@@ -38,6 +38,7 @@ function getCertificates(){
         url : '/certificate/getAll',
         type : 'get',
         success : function(data) {
+        alert(data);
 			var str = "";
 			$.each(data, function(i, item){
 				str += '<tr>'+
