@@ -2,6 +2,7 @@ package ftn.securexml.certificate.service;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.text.ParseException;
@@ -102,6 +103,16 @@ public class GenerateCertificateService {
 		KeyStoreReader ksr=new KeyStoreReader();
 		X509Certificate cer=(X509Certificate)ksr.readCertificate("appkeystore.jks", "mikimaus", Integer.toString(i));
 		return makeCertDTOFromCert(cer);
+	}
+
+	public PublicKey getPublicKeyById(int i){
+		KeyStoreReader ksr=new KeyStoreReader();
+		return ((X509Certificate)ksr.readCertificate("appkeystore.jks", "mikimaus", Integer.toString(i))).getPublicKey();
+	}
+
+	public PrivateKey getPrivateKeyById(int i){
+		KeyStoreReader ksr=new KeyStoreReader();
+		return ksr.readPrivateKey("appkeystore.jks", "mikimaus", Integer.toString(i), "mikimaus");
 	}
 
 	private IssuerData generateSelfSignedIssuerData(CertificateDTO certificate, PrivateKey issuerKey) {
