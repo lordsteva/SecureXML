@@ -33,12 +33,16 @@ public class CertificateController {
 		return (certificateService.createCertificate(certificate))? ResponseEntity.status(200).build() : ResponseEntity.badRequest().build();
 	}
 	
-	@GetMapping("/getAll")
+	@GetMapping("/getAllCa")
 	public ResponseEntity<?> getAllCa(HttpServletRequest request)
 	{
 		return ResponseEntity.ok(certificateService.getAllCa());
 	}
 	
-	
-	
+	@GetMapping("/getAll")
+	public ResponseEntity<?> getAll(HttpServletRequest request)
+	{
+		return ResponseEntity.ok(certificateService.getAll());
+	}
+
 }

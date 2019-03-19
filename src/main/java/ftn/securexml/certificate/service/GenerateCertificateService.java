@@ -84,6 +84,17 @@ public class GenerateCertificateService {
 		return retVal;
 	}
 	
+	public List<CertificateDTO>getAll(){
+		List<CertificateDTO>retVal=new ArrayList<CertificateDTO>();
+		List<ftn.securexml.model.Certificate>allAlias=certificateRepository.findAll();
+		for(int i=0;i<allAlias.size();i++) {
+			KeyStoreReader ksr=new KeyStoreReader();
+			X509Certificate cer=(X509Certificate)ksr.readCertificate("appkeystore.jks", "mikimaus", allAlias.get(i).getCertificateId());
+			retVal.add(makeCertDTOFromCert(cer));
+		}
+		return retVal;
+	}
+
 	private IssuerData generateSelfSignedIssuerData(CertificateDTO certificate, PrivateKey issuerKey) {
 		X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
 
@@ -166,7 +177,7 @@ public class GenerateCertificateService {
             
             RDN sta = subjName.getRDNs(BCStyle.ST)[0];
             String staname = IETFUtils.valueToString(sta.getFirst().getValue());
-            cDTO.setCountry(staname);
+            cDTO.setState(staname);
             
             RDN en = subjName.getRDNs(BCStyle.E)[0];
             String emname = IETFUtils.valueToString(en.getFirst().getValue());

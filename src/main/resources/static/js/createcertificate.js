@@ -38,10 +38,14 @@ adjust_body_offset();
 
 function getCertificates(){
 	$.ajax({
-        url : '/certificate/getAll',
+        url : '/certificate/getAllCa',
         type : 'get',
         success : function(data) {
-            alert("get all ok");
+			var str="";
+			$.each(data, function(i, item){
+				str += '<option value="' + item.id + '">Common name: ' + item.commonName + '</option>';
+			});
+			$("#issuerselectid").append(str);
         },
         error : function(data) {
             alert("get all fail");
