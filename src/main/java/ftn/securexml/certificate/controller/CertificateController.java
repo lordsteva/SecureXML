@@ -65,4 +65,10 @@ public class CertificateController {
 		return ResponseEntity.ok(certificateService.getPrivateKeyById(id).toString());
 	}
 
+	@GetMapping("/revoke/{id}")
+	public ResponseEntity<?> revoke(HttpServletRequest request, @PathVariable int id)
+	{
+		return ResponseEntity.ok("sta god");
+	}
+
 }

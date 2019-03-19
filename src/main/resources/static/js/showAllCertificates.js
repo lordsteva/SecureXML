@@ -79,6 +79,19 @@ function getCertificates(){
 function addButtonListeners() {
 }
 
+function revoke(id){
+	$.ajax({
+        url : '/certificate/revoke/'+id,
+        type : 'get',
+        success : function(data) {
+			alert("sve ok");
+		},
+        error : function(data) {
+            alert("get fail");
+        },
+    });
+}
+
 function getPublic(id){
 	$.ajax({
         url : '/certificate/getPublic/'+id,
