@@ -1,10 +1,12 @@
 package ftn.securexml.certificate.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,10 +47,22 @@ public class CertificateController {
 		return ResponseEntity.ok(certificateService.getAll());
 	}
 
-	@GetMapping("/get")
-	public ResponseEntity<?> get(HttpServletRequest request)
+	@GetMapping("/get/{id}")
+	public ResponseEntity<?> get(HttpServletRequest request, @PathVariable int id)
 	{
-		return ResponseEntity.ok(certificateService.getById(1));
+		return ResponseEntity.ok(certificateService.getById(id));
+	}
+
+	@GetMapping("/getPublic/{id}")
+	public ResponseEntity<?> getPublic(HttpServletRequest request, @PathVariable int id)
+	{
+		return ResponseEntity.ok(certificateService.getPublicKeyById(id).toString());
+	}
+
+	@GetMapping("/getPrivate/{id}")
+	public ResponseEntity<?> getPrivate(HttpServletRequest request, @PathVariable int id)
+	{
+		return ResponseEntity.ok(certificateService.getPrivateKeyById(id).toString());
 	}
 
 }

@@ -48,7 +48,7 @@ function getCertificates(){
 					str +=  '<td>Self signed</td>';
 				}else{
 					$.ajax({
-				        url : '/certificate/get',
+				        url : '/certificate/get/'+item.issuerId,
 				        type : 'get',
 				        async: false,
 				        success : function(data) {
@@ -63,9 +63,9 @@ function getCertificates(){
 						'<td>' + item.endDate + '</td>'+
 						'<td>' + item.ca + '</td>'+
 						'<td>' + item.id + '</td>'+
-						'<td><button type="button" class="btn btn-primary" id="revoke">Revoke</button></td>'+
-						'<td><button type="button" class="btn btn-primary" id="get_public">Get key</button></td>'+
-						'<td><button type="button" class="btn btn-primary" id="get_private">Get key</button></td>'+
+						'<td><button type="button" class="btn btn-primary" id="revoke"  onclick="revoke(' + item.id + ')">Revoke</button></td>'+
+						'<td><button type="button" class="btn btn-primary" id="get_public" onclick="getPublic(' + item.id + ')">Get key</button></td>'+
+						'<td><button type="button" class="btn btn-primary" id="get_private" onclick="getPrivate(' + item.id + ')">Get key</button></td>'+
 					'</tr>';
 			});
 			$("#certtable").append(str);
@@ -77,6 +77,32 @@ function getCertificates(){
 }
 
 function addButtonListeners() {
+}
+
+function getPublic(id){
+	$.ajax({
+        url : '/certificate/getPublic/'+id,
+        type : 'get',
+        success : function(data) {
+			alert(JSON.stringify(data));
+		},
+        error : function(data) {
+            alert("get fail");
+        },
+    });
+}
+
+function getPrivate(id){
+	$.ajax({
+        url : '/certificate/getPrivate/'+id,
+        type : 'get',
+        success : function(data) {
+			alert(JSON.stringify(data));
+		},
+        error : function(data) {
+            alert("get fail");
+        },
+    });
 }
 
 function adjust_body_offset() {
