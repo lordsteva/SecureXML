@@ -45,4 +45,10 @@ public class CertificateController {
 		return ResponseEntity.ok(certificateService.getAll());
 	}
 
+	@GetMapping("/get")
+	public ResponseEntity<?> get(HttpServletRequest request)
+	{
+		return ResponseEntity.ok(certificateService.getById(1));
+	}
+
 }
