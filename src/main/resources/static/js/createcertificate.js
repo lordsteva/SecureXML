@@ -43,7 +43,7 @@ function getCertificates(){
         success : function(data) {
 			var str="";
 			$.each(data, function(i, item){
-				str += '<option value="' + item.id + '">Common name: ' + item.commonName + '</option>';
+				str += '<option value="' + item.id + '">C = ' + item.country + ', ST = ' + item.state + ', L = ' + item.localityName + ', O = ' + item.organization + ', OU = ' + item.organizationalUnitName + ', CN = ' + item.commonName + ', Email = ' + item.email + '</option>';
 			});
 			$("#issuerselectid").append(str);
         },

@@ -14,7 +14,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/additional-methods.min.js"></script>
 		<link rel="stylesheet" href="/css/validation/screen.css">
 		
-		<script src="js/sysadmin.js"></script>
+		<script src="js/showAllCertificates.js"></script>
 		
 		</head>
 <body style="background-color: #e9ebee;">
@@ -23,7 +23,7 @@
 			<div class="col-md-1"></div>
 			<div class="col-md-10">
 				<h2>All certificates</h2>
-				<table  class="table table-striped">
+				<table id="certtable"  class="table table-striped">
 					<th>
 						<td><b>ID</b></td>
 						<td><b>Subject data</b></td>
@@ -36,32 +36,6 @@
 						<td><b>Publlic key</b></td>
 						<td><b>Private key</b></td>
 					</th>
-					<tr>
-						<td></td>
-						<td><b>1</b></td>
-						<td>asdf</td>
-						<td>qwer</td>
-						<td>12.21.2012</td>
-						<td>16.11.2019</td>
-						<td>yes</td>
-						<td>yes</td>
-						<td><button type="button" class="btn btn-primary" id="revoke">Revoke</button></td>
-						<td><button type="button" class="btn btn-primary" id="get_public">Get key</button></td>
-						<td><button type="button" class="btn btn-primary" id="get_private">Get key</button></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><b>1</b></td>
-						<td>asdf</td>
-						<td>qwer</td>
-						<td>12.21.2012</td>
-						<td>16.11.2019</td>
-						<td>yes</td>
-						<td>yes</td>
-						<td><button type="button" class="btn btn-primary" id="revoke">Revoke</button></td>
-						<td><button type="button" class="btn btn-primary" id="get_public">Get key</button></td>
-						<td><button type="button" class="btn btn-primary" id="get_private">Get key</button></td>
-					</tr>
 				</table>
 			</div>
 			<div class="col-md-1"></div>
