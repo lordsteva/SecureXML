@@ -109,12 +109,12 @@ public class GenerateCertificateService {
 		    builder.addRDN(BCStyle.E, certificate.getEmail());	
 		    builder.addRDN(BCStyle.ST, certificate.getState());	
 		    builder.addRDN(BCStyle.L, certificate.getLocalityName());
-		    try {
+		    if(certificate.getIssuerId()==null) {
+		    	builder.addRDN(BCStyle.UNIQUE_IDENTIFIER, certificate.getId());
+		    }
+		    else {
 			    builder.addRDN(BCStyle.UNIQUE_IDENTIFIER, certificate.getIssuerId());
 		    }
-		    catch (NullPointerException npe) {
-				System.out.println("samopotpisujuci je...");
-			}
 
 		    //UID (USER ID) je ID korisnika
 		    builder.addRDN(BCStyle.UID, "654321");
