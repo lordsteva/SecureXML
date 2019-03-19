@@ -98,6 +98,12 @@ public class GenerateCertificateService {
 		return retVal;
 	}
 
+	public CertificateDTO getById(int i){
+		KeyStoreReader ksr=new KeyStoreReader();
+		X509Certificate cer=(X509Certificate)ksr.readCertificate("appkeystore.jks", "mikimaus", Integer.toString(i));
+		return makeCertDTOFromCert(cer);
+	}
+
 	private IssuerData generateSelfSignedIssuerData(CertificateDTO certificate, PrivateKey issuerKey) {
 		X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
 		//znaci da je self signed, isuer je isto kao i subject

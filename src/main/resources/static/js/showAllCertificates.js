@@ -38,14 +38,23 @@ function getCertificates(){
         url : '/certificate/getAll',
         type : 'get',
         success : function(data) {
-			var str="";
+			var str = "";
 			$.each(data, function(i, item){
 				str += '<tr>'+
 						'<td></td>'+
 						'<td><b>' + item.id + '</b></td>'+
-						'<td>' + 'C = ' + item.country + ', ST = ' + item.state + ', L = ' + item.localityName + ', O = ' + item.organization + ', OU = ' + item.organizationalUnitName + ', CN = ' + item.commonName + ', Email = ' + item.email + '</td>'+
-						'<td>' + item.issuerId + '</td>'+
-						'<td>' + item.startDate + '</td>'+
+						'<td>' + 'C = ' + item.country + ', ST = ' + item.state + ', L = ' + item.localityName + ', O = ' + item.organization + ', OU = ' + item.organizationalUnitName + ', CN = ' + item.commonName + ', Email = ' + item.email + '</td>';
+				$.ajax({
+			        url : '/certificate/get',
+			        type : 'get',
+			        success : function(data) {
+						str += '<td>' + 'C = ' + data.country + ', ST = ' + data.state + ', L = ' + item.localityName + ', O = ' + data.organization + ', OU = ' + data.organizationalUnitName + ', CN = ' + data.commonName + ', Email = ' + data.email + '</td>';
+					},
+			        error : function(data) {
+			            alert("get fail");
+			        },
+			    });
+				str +=  '<td>' + item.startDate + '</td>'+
 						'<td>' + item.endDate + '</td>'+
 						'<td>' + item.ca + '</td>'+
 						'<td>' + item.id + '</td>'+
