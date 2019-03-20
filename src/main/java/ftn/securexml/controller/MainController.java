@@ -1,6 +1,7 @@
 
 package ftn.securexml.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,14 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ftn.securexml.model.Authority;
 import ftn.securexml.model.User;
+import ftn.securexml.repository.UserRepository;
 import ftn.securexml.security.TokenUtils;
 import ftn.securexml.service.CustomUserDetailsService;
 
@@ -26,6 +25,7 @@ public class MainController {
     private CustomUserDetailsService userDetailsService;
     @Autowired
     TokenUtils tokenUtils;
+    @Autowired UserRepository userRepository;
 
 	@GetMapping(value = "/")
     public ModelAndView method(HttpServletRequest request,@RequestParam(required=false) String token) {
@@ -57,6 +57,21 @@ public class MainController {
 */
         }
         return new ModelAndView("redirect:" + "index.html");
+	}
+	
+	@GetMapping("/checkIsAdmin")
+	public ResponseEntity<?> checkIsAdmin(HttpServletRequest request)
+	{
+		String token=tokenUtils.getToken(request);
+		String username=tokenUtils.getUsernameFromToken(token);
+		User user = userRepository.findOneByUsername(username);
+		List<String>retVal=new ArrayList<String>();
+		if(user==null)
+			return ResponseEntity.ok(retVal);
+		for(int i=0;i<user.getAllAuthorities().size();i++) {
+			retVal.add(user.getAllAuthorities().get(i).getName());
+		}
+		return ResponseEntity.ok(retVal);
 	}
 
 }
