@@ -42,8 +42,8 @@ $(document).ready(function () {
             alert("get all fail");
         }
      });
-	datefrom.min = new Date().toISOString().split("T")[0];
-	dateto.min = new Date().toISOString().split("T")[0];
+	//datefrom.min = new Date().toISOString().split("T")[0];
+	//dateto.min = new Date().toISOString().split("T")[0];
 
 	setInterval(refreshToken, 60000); //svaki min
     addButtonListeners();

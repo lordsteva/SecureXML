@@ -8,6 +8,7 @@ import java.security.cert.X509Certificate;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -275,6 +276,35 @@ public class GenerateCertificateService {
 		if (c == null)
 			return null;
 		return c.isRevoked();
+	}
+
+	public Boolean isDateOk(Long id) {
+		KeyStoreReader ksr = new KeyStoreReader();
+		X509Certificate c = (X509Certificate) ksr.readCertificate("appkeystore.jks", "mikimaus", id.toString());
+		Date start =  c.getNotBefore();
+		Date end =  c.getNotAfter();
+		System.out.println(Calendar.getInstance().getTime());
+		if(start.after(end) || start.after(Calendar.getInstance().getTime()) || end.before(Calendar.getInstance().getTime())) {
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean isValid(Long id) {
+		KeyStoreReader ksr = new KeyStoreReader();
+		X509Certificate c = (X509Certificate) ksr.readCertificate("appkeystore.jks", "mikimaus", id.toString());
+		Long parentId = null;
+		try {
+			parentId = Long.valueOf(makeCertDTOFromCert(c).getIssuerId());
+		}catch (Exception e) {
+			parentId = null;
+		}
+		if(parentId!=id) {
+			if(!isValid(parentId)) {
+				return false;
+			}
+		}
+		return !isRevoked(id) && isDateOk(id);
 	}
 
 	public String revokedReason(Long id) {

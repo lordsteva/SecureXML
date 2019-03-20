@@ -81,20 +81,24 @@ function getCertificates(){
 						'<td>' + item.endDate + '</td>'+
 						'<td>' + item.ca + '</td>';
 				$.ajax({
-			        url : '/certificate/isrevoked/'+item.id,
+			        url : '/certificate/isvalid/'+item.id,
 			        type : 'get',
 			        async: false,
 			        contentType : 'application/json',
 			        success : function(data) {
 						str += '<td>' + JSON.stringify(data) + '</td>';
-						if(data === true){
+						if(data === false){
 							$.ajax({
 					        url : '/certificate/revokedReason/'+item.id,
 					        type : 'get',
 					        async: false,
 					        contentType : 'application/json',
 					        success : function(data) {
-								str += '<td>' + JSON.parse(data).reason + '</td>';
+								try {
+									str += '<td>Revoked: ' + JSON.parse(data).reason + '</td>';
+								}catch (e) {
+									str += '<td>not valid</td>';
+								}
 							},
 					        error : function(data) {
 					            alert("get revoked reason fail");

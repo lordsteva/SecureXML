@@ -90,6 +90,14 @@ public class CertificateController {
 		return ResponseEntity.badRequest().body("Invalid certificate id");
 	}
 
+	@GetMapping("/isvalid/{id}")
+	public ResponseEntity<?> isValid(@PathVariable Long id){
+		Boolean ret = certificateService.isValid(id);;
+		if(ret!=null)
+			return ResponseEntity.ok(ret);
+		return ResponseEntity.badRequest().body("Invalid certificate id");
+	}
+
 	@GetMapping("/revokedReason/{id}")
 	public ResponseEntity<?> revokedReason(@PathVariable Long id){
 		return ResponseEntity.ok().body(certificateService.revokedReason(id));
