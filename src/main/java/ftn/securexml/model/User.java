@@ -30,12 +30,16 @@ public class User implements UserDetails {
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
-	private List<Authority> authorities;;
+	private List<Authority> authorities;
 
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
 	}
 
+	public List<Authority>getAllAuthorities(){
+		return authorities;
+	}
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.authorities;
@@ -54,6 +58,10 @@ public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
+	public Long getId() {
+		return id;
+	}
 
 	@Column(nullable = false)
 	private Boolean activated;
