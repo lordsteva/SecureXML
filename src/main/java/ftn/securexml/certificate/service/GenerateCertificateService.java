@@ -251,5 +251,9 @@ public class GenerateCertificateService {
 		return c.isRevoked();
 	}
 	
-	
+	public String revokedReason(Long id) {
+		Certificate c=certificateRepository.findByCertificateId(id);
+		return c.getRevokeReason();
+	}
+
 }

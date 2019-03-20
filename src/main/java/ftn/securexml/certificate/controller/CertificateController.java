@@ -75,7 +75,7 @@ public class CertificateController {
 	}
 	
 	//Provera da li je povucen, svako moze da pristupi?
-	@PostMapping("/isrevoked/{id}")
+	@GetMapping("/isrevoked/{id}")
 	public ResponseEntity<?> isRevoked(@PathVariable Long id){
 		Boolean ret=certificateService.isRevoked(id);
 		if(ret!=null)

@@ -61,10 +61,25 @@ function getCertificates(){
 			    }
 				str +=  '<td>' + item.startDate + '</td>'+
 						'<td>' + item.endDate + '</td>'+
-						'<td>' + item.ca + '</td>'+
-						'<td>' + item.id + '</td>'+
-						'<td><button type="button" class="btn btn-primary" id="revoke" onclick="openModal(' + item.id + ')">Revoke</button></td>'+
-						'<td><button type="button" class="btn btn-primary" id="get_public" onclick="getPublic(' + item.id + ')">Get key</button></td>'+
+						'<td>' + item.ca + '</td>';
+				$.ajax({
+			        url : '/certificate/isrevoked/'+item.id,
+			        type : 'get',
+			        async: false,
+			        contentType : 'application/json',
+			        success : function(data) {
+						str += '<td>' + JSON.stringify(data) + '</td>';
+						if(data === true){
+							str +='<td>revoked napisi reason</td>';
+						}else{
+							str +='<td><button type="button" class="btn btn-primary" id="revoke" onclick="openModal(' + item.id + ')">Revoke</button></td>';
+						}
+					},
+			        error : function(data) {
+			            alert("get revoked fail");
+			        },
+			    });
+				str +=  '<td><button type="button" class="btn btn-primary" id="get_public" onclick="getPublic(' + item.id + ')">Get key</button></td>'+
 						'<td><button type="button" class="btn btn-primary" id="get_private" onclick="getPrivate(' + item.id + ')">Get key</button></td>'+
 					'</tr>';
 			});
@@ -93,9 +108,7 @@ function revoke(id){
 	d.reason = $("input[id='reason']").val();
 	$.ajax({
         url : '/certificate/revoke/'+id,
-        type : 'post',
-        contentType : 'application/json',
-        data : JSON.stringify(d),
+        type : 'get',
         success : function(data) {
 			alert("sve ok");
 		},
