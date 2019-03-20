@@ -85,6 +85,11 @@ public class CertificateController {
 		return ResponseEntity.badRequest().body("Invalid certificate id");
 	}
 
+	@GetMapping("/revokedReason/{id}")
+	public ResponseEntity<?> revokedReason(@PathVariable Long id){
+		return ResponseEntity.ok().body(certificateService.revokedReason(id));
+	}
+
 	@PostMapping("/keystore")
 	public ResponseEntity<?> createKeystore(HttpServletRequest request,@RequestBody KeystoreDTO keystoreDTO)
 	{

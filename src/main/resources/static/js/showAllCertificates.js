@@ -70,7 +70,18 @@ function getCertificates(){
 			        success : function(data) {
 						str += '<td>' + JSON.stringify(data) + '</td>';
 						if(data === true){
-							str +='<td>revoked napisi reason</td>';
+							$.ajax({
+					        url : '/certificate/revokedReason/'+item.id,
+					        type : 'get',
+					        async: false,
+					        contentType : 'application/json',
+					        success : function(data) {
+								str += '<td>' + JSON.parse(data).reason + '</td>';
+							},
+					        error : function(data) {
+					            alert("get revoked reason fail");
+					        },
+					    });
 						}else{
 							str +='<td><button type="button" class="btn btn-primary" id="revoke" onclick="openModal(' + item.id + ')">Revoke</button></td>';
 						}
@@ -131,7 +142,9 @@ function revoke(id){
 	d.reason = $("input[id='reason']").val();
 	$.ajax({
         url : '/certificate/revoke/'+id,
-        type : 'get',
+        type : 'post',
+        contentType : 'application/json',
+        data : JSON.stringify(d),
         success : function(data) {
 			alert("sve ok");
 		},
