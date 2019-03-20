@@ -210,7 +210,7 @@ public class GenerateCertificateService {
             String emname = IETFUtils.valueToString(en.getFirst().getValue());
             cDTO.setEmail(emname);
           
-            RDN subjectId = iss.getRDNs(BCStyle.UNIQUE_IDENTIFIER)[0];
+            RDN subjectId = subjName.getRDNs(BCStyle.UNIQUE_IDENTIFIER)[0];
             String subId = IETFUtils.valueToString(subjectId.getFirst().getValue());
             cDTO.setIssuerId(subId);
             
@@ -223,8 +223,7 @@ public class GenerateCertificateService {
             cDTO.setEndDate(cert.getNotAfter().toString());
             
             ftn.securexml.model.Certificate certFromDB=certificateRepository.findByCertificateId(Long.parseLong(subId));
-            cDTO.setCa(certFromDB.isCa());;
-            
+            cDTO.setCa(certFromDB.isCa());
             return cDTO;
            
         } catch (CertificateEncodingException e) {
