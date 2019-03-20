@@ -14,26 +14,31 @@ public class Certificate {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "certificateId", nullable = false)
-	private String certificateId;
+	private Long certificateId;
 
 	@Column(name = "isCa", nullable = false)
 	private boolean isCa;
 	
+	@Column(nullable = false)
+	private boolean revoked;
+	
+	@Column
+	private String revokeReason;
+	
 	public Certificate() {
 		
 	}
-
+	
 	public Certificate(boolean isCa) {
 		super();
-		this.certificateId = certificateId;
 		this.isCa = isCa;
 	}
-
-	public String getCertificateId() {
+	
+	public Long getCertificateId() {
 		return certificateId;
 	}
 
-	public void setCertificateId(String certificateId) {
+	public void setCertificateId(Long certificateId) {
 		this.certificateId = certificateId;
 	}
 
@@ -44,5 +49,22 @@ public class Certificate {
 	public void setCa(boolean isCa) {
 		this.isCa = isCa;
 	}
+
+	public boolean isRevoked() {
+		return revoked;
+	}
+
+	public void setRevoked(boolean revoked) {
+		this.revoked = revoked;
+	}
+
+	public String getRevokeReason() {
+		return revokeReason;
+	}
+
+	public void setRevokeReason(String revokeReason) {
+		this.revokeReason = revokeReason;
+	}
+	
 	
 }

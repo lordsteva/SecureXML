@@ -27,6 +27,7 @@ import ftn.securexml.certificate.data.SubjectData;
 import ftn.securexml.certificate.dto.CertificateDTO;
 import ftn.securexml.certificate.generators.CertificateGenerator;
 import ftn.securexml.certificate.generators.KeyGenerator;
+import ftn.securexml.model.Certificate;
 
 @Service
 public class GenerateCertificateService {
@@ -45,10 +46,10 @@ public class GenerateCertificateService {
 		certificateRepository.save(c);
 
 		//Serijski broj sertifikata
-		String sn=c.getCertificateId();
+		String sn=c.getCertificateId().toString();
 		
 		//Id se generisao prilikom upisa u bazu, setujemo da mozemo da ga upisemo u KeyStore
-		certificate.setId(c.getCertificateId());
+		certificate.setId(c.getCertificateId().toString());
 		
 		SubjectData subjectData = generateSubjectData(certificate, keyPairSubject, sn);
 		IssuerData issuerData=null;
@@ -82,7 +83,7 @@ public class GenerateCertificateService {
 		List<ftn.securexml.model.Certificate>allAlias=certificateRepository.findByIsCa(true);
 		for(int i=0;i<allAlias.size();i++) {
 			KeyStoreReader ksr=new KeyStoreReader();
-			X509Certificate cer=(X509Certificate)ksr.readCertificate("appkeystore.jks", "mikimaus", allAlias.get(i).getCertificateId());
+			X509Certificate cer=(X509Certificate)ksr.readCertificate("appkeystore.jks", "mikimaus", allAlias.get(i).getCertificateId().toString());
 			retVal.add(makeCertDTOFromCert(cer));
 		}
 		return retVal;
@@ -93,7 +94,7 @@ public class GenerateCertificateService {
 		List<ftn.securexml.model.Certificate>allAlias=certificateRepository.findAll();
 		for(int i=0;i<allAlias.size();i++) {
 			KeyStoreReader ksr=new KeyStoreReader();
-			X509Certificate cer=(X509Certificate)ksr.readCertificate("appkeystore.jks", "mikimaus", allAlias.get(i).getCertificateId());
+			X509Certificate cer=(X509Certificate)ksr.readCertificate("appkeystore.jks", "mikimaus", allAlias.get(i).getCertificateId().toString());
 			retVal.add(makeCertDTOFromCert(cer));
 		}
 		return retVal;
@@ -209,6 +210,10 @@ public class GenerateCertificateService {
             RDN en = subjName.getRDNs(BCStyle.E)[0];
             String emname = IETFUtils.valueToString(en.getFirst().getValue());
             cDTO.setEmail(emname);
+          
+            RDN subjectId = subjName.getRDNs(BCStyle.UNIQUE_IDENTIFIER)[0];
+            String subId = IETFUtils.valueToString(subjectId.getFirst().getValue());
+            cDTO.setIssuerId(subId);
             
             RDN issuerId = iss.getRDNs(BCStyle.UNIQUE_IDENTIFIER)[0];
             String issId = IETFUtils.valueToString(issuerId.getFirst().getValue());
@@ -217,6 +222,9 @@ public class GenerateCertificateService {
             cDTO.setId(String.valueOf((cert).getSerialNumber()));
             cDTO.setStartDate(cert.getNotBefore().toString());
             cDTO.setEndDate(cert.getNotAfter().toString());
+            
+            ftn.securexml.model.Certificate certFromDB=certificateRepository.findByCertificateId(Long.parseLong(subId));
+            cDTO.setCa(certFromDB.isCa());
             return cDTO;
            
         } catch (CertificateEncodingException e) {
@@ -225,6 +233,23 @@ public class GenerateCertificateService {
         }
 
     }
+
+	public boolean revoke(Long id,String reason) {
+		Certificate c=certificateRepository.findByCertificateId(id);
+		if(c==null)	
+			return false;
+		c.setRevoked(true);
+		c.setRevokeReason(reason);
+		certificateRepository.save(c);
+		return true;
+	}
+
+	public Boolean isRevoked(Long id) {
+		Certificate c=certificateRepository.findByCertificateId(id);
+		if(c==null)
+			return null;
+		return c.isRevoked();
+	}
 	
 	
 }
