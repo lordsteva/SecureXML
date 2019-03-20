@@ -30,6 +30,78 @@
 
 </head>
 <body style="background-color: #e9ebee;">
-<div id="nodes"></div>
+	<div id="nodes"></div>
+	<button id="showNodeModal" hidden data-toggle="modal" href="#nodeModal"></button>
+	<div class="modal fade" id="nodeModal">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h4 class="modal-title">Certificate data</h4>
+					<button type="button" class="close" data-dismiss="modal">×</button>
+				</div>
+				<div class="modal-body">
+					<table class="table">
+						<tbody>
+							<tr>
+								<th>ID</th>
+								<td id="nodeID"></td>
+							</tr>
+							<tr>
+								<th>Common name</th>
+								<td id="nodeCN"></td>
+							</tr>
+							<tr>
+								<th>Email</th>
+								<td id="nodeE"></td>
+							</tr>
+							<tr>
+								<th>Organization</th>
+								<td id="nodeO"></td>
+							</tr>
+							<tr>
+								<th>Organizational unit</th>
+								<td id="nodeOU"></td>
+							</tr>
+							<tr>
+								<th>Locality</th>
+								<td id="nodeL"></td>
+							</tr>
+							<tr>
+								<th>County</th>
+								<td id="nodeC"></td>
+							</tr>
+							<tr>
+								<th>State</th>
+								<td id="nodeS"></td>
+							</tr>
+							<tr>
+								<th>Start date</th>
+								<td id="nodeStart"></td>
+							</tr>
+							<tr>
+								<th>End date</th>
+								<td id="nodeEnd"></td>
+							</tr>
+							
+							<tr>
+								<th>Revoked</th>
+								<td id="nodeR"></td>
+
+							</tr>
+						</tbody>
+					</table>
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
 </body>
 </html>
