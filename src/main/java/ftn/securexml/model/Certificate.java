@@ -22,7 +22,7 @@ public class Certificate {
 	@Column(nullable = false)
 	private boolean revoked;
 	
-	@Column
+	@Column(nullable = true)
 	private String revokeReason;
 	
 	public Certificate() {
@@ -32,6 +32,7 @@ public class Certificate {
 	public Certificate(boolean isCa) {
 		super();
 		this.isCa = isCa;
+		this.revoked=false;
 	}
 	
 	public Long getCertificateId() {

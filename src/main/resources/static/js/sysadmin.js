@@ -24,7 +24,24 @@ function refreshToken(){
 }
 
 $(document).ready(function () {
-	
+	$.ajax({
+        url : '/checkIsAdmin',
+        type : 'get',
+        success : function(data) {
+        	let ret=1;
+       		$.each(data, function(i, item){
+	       		if(item=="ROLE_SYSTEM_ADMIN"){
+	       			ret=0;
+				}
+			});
+			if(ret==1){
+				window.location.replace("index.html");
+			}
+        },
+        error : function(data) {
+            alert("get all fail");
+        }
+    });
 	setInterval(refreshToken, 60000); //svaki min
     addButtonListeners();
 });

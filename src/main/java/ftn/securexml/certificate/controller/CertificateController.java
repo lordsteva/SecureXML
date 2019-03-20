@@ -1,7 +1,6 @@
 package ftn.securexml.certificate.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import antlr.collections.List;
 import ftn.securexml.certificate.dto.CertificateDTO;
 import ftn.securexml.certificate.dto.KeystoreDTO;
 import ftn.securexml.certificate.service.GenerateCertificateService;
+import ftn.securexml.security.TokenUtils;
 
 
 @RestController
@@ -25,7 +25,11 @@ public class CertificateController {
 
 	@Autowired
 	private GenerateCertificateService certificateService;
+
+	@Autowired
+	private TokenUtils tokenUtils;
 	
+	@PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
 	@GetMapping("/create")
 	public ResponseEntity<?> addOffice(HttpServletRequest request)
 	{
@@ -35,7 +39,8 @@ public class CertificateController {
 	@PostMapping("/create")
 	public ResponseEntity<?> addOffice(HttpServletRequest request, @RequestBody CertificateDTO certificate)
 	{
-		return (certificateService.createCertificate(certificate))? ResponseEntity.status(200).build() : ResponseEntity.badRequest().build();
+		String token=tokenUtils.getToken(request);
+		return (certificateService.createCertificate(certificate, token))? ResponseEntity.status(200).build() : ResponseEntity.badRequest().build();
 	}
 	
 	@GetMapping("/getAllCa")
