@@ -27,6 +27,7 @@ import ftn.securexml.certificate.data.SubjectData;
 import ftn.securexml.certificate.dto.CertificateDTO;
 import ftn.securexml.certificate.generators.CertificateGenerator;
 import ftn.securexml.certificate.generators.KeyGenerator;
+import ftn.securexml.model.Certificate;
 
 @Service
 public class GenerateCertificateService {
@@ -232,6 +233,23 @@ public class GenerateCertificateService {
         }
 
     }
+
+	public boolean revoke(Long id,String reason) {
+		Certificate c=certificateRepository.findByCertificateId(id);
+		if(c==null)	
+			return false;
+		c.setRevoked(true);
+		c.setRevokeReason(reason);
+		certificateRepository.save(c);
+		return true;
+	}
+
+	public Boolean isRevoked(Long id) {
+		Certificate c=certificateRepository.findByCertificateId(id);
+		if(c==null)
+			return null;
+		return c.isRevoked();
+	}
 	
 	
 }

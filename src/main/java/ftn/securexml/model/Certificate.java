@@ -19,10 +19,16 @@ public class Certificate {
 	@Column(name = "isCa", nullable = false)
 	private boolean isCa;
 	
+	@Column(nullable = false)
+	private boolean revoked;
+	
+	@Column
+	private String revokeReason;
+	
 	public Certificate() {
 		
 	}
-
+	
 	public Certificate(boolean isCa) {
 		super();
 		this.isCa = isCa;
@@ -43,5 +49,22 @@ public class Certificate {
 	public void setCa(boolean isCa) {
 		this.isCa = isCa;
 	}
+
+	public boolean isRevoked() {
+		return revoked;
+	}
+
+	public void setRevoked(boolean revoked) {
+		this.revoked = revoked;
+	}
+
+	public String getRevokeReason() {
+		return revokeReason;
+	}
+
+	public void setRevokeReason(String revokeReason) {
+		this.revokeReason = revokeReason;
+	}
+	
 	
 }

@@ -5,6 +5,7 @@ import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,11 +65,23 @@ public class CertificateController {
 	{
 		return ResponseEntity.ok(certificateService.getPrivateKeyById(id).toString());
 	}
-
-	@GetMapping("/revoke/{id}")
-	public ResponseEntity<?> revoke(HttpServletRequest request, @PathVariable int id)
+	
+	
+	//povlacenje, samo admin moze
+	@PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
+	@PostMapping("/revoke/{id}")
+	public ResponseEntity<?> revoke(HttpServletRequest request, @PathVariable Long id,@RequestBody String reason)
 	{
-		return ResponseEntity.ok("sta god");
+		return ResponseEntity.ok(certificateService.revoke(id,reason));
+	}
+	
+	//Provera da li je povucen, svako moze da pristupi?
+	@PostMapping("/isrevoked/{id}")
+	public ResponseEntity<?> isRevoked(@PathVariable Long id){
+		Boolean ret=certificateService.isRevoked(id);
+		if(ret!=null)
+			return ResponseEntity.ok(ret); 
+		return ResponseEntity.badRequest().body("Invalid certificate id");
 	}
 
 }
