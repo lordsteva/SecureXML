@@ -46,6 +46,15 @@ function getCertificates(){
 				str += '<option value="' + item.id + '">C = ' + item.country + ', ST = ' + item.state + ', L = ' + item.localityName + ', O = ' + item.organization + ', OU = ' + item.organizationalUnitName + ', CN = ' + item.commonName + ', Email = ' + item.email + '</option>';
 			});
 			$("#issuerselectid").append(str);
+			if(str===""){
+				$("#issuerselectid").hide();
+				$("#selfsigned").prop('checked', true);
+				$("#selfsigned").attr("disabled", true);
+				$("#ca").prop('checked', true);
+				$("#ca").attr("disabled", true);
+			}else{
+				$("#selfsignedrow").hide();
+			}
         },
         error : function(data) {
             alert("get all fail");

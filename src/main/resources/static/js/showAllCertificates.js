@@ -63,7 +63,7 @@ function getCertificates(){
 						'<td>' + item.endDate + '</td>'+
 						'<td>' + item.ca + '</td>'+
 						'<td>' + item.id + '</td>'+
-						'<td><button type="button" class="btn btn-primary" id="revoke"  onclick="revoke(' + item.id + ')">Revoke</button></td>'+
+						'<td><button type="button" class="btn btn-primary" id="revoke" onclick="openModal(' + item.id + ')">Revoke</button></td>'+
 						'<td><button type="button" class="btn btn-primary" id="get_public" onclick="getPublic(' + item.id + ')">Get key</button></td>'+
 						'<td><button type="button" class="btn btn-primary" id="get_private" onclick="getPrivate(' + item.id + ')">Get key</button></td>'+
 					'</tr>';
@@ -76,18 +76,31 @@ function getCertificates(){
     });
 }
 
+function openModal(id) {
+	$("#revokeModal").modal('show');
+	$("#modalFooter").html("");
+	$("#modalFooter").append('<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button><button class="btn btn-primary" onclick="revoke(' + id + ')">Revoke</button>');
+}
+
 function addButtonListeners() {
+	$('#revokeCertificate').submit(function(e) {
+		revoke()
+	});
 }
 
 function revoke(id){
+	var d = {};
+	d.reason = $("input[id='reason']").val();
 	$.ajax({
         url : '/certificate/revoke/'+id,
-        type : 'get',
+        type : 'post',
+        contentType : 'application/json',
+        data : JSON.stringify(d),
         success : function(data) {
 			alert("sve ok");
 		},
         error : function(data) {
-            alert("get fail");
+            alert("get1 fail");
         },
     });
 }
