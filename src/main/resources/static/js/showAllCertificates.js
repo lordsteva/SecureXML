@@ -80,13 +80,36 @@ function getCertificates(){
 			        },
 			    });
 				str +=  '<td><button type="button" class="btn btn-primary" id="get_public" onclick="getPublic(' + item.id + ')">Get key</button></td>'+
-						'<td><button type="button" class="btn btn-primary" id="get_private" onclick="getPrivate(' + item.id + ')">Get key</button></td>'+
+						'<td><input type="checkbox" name="keystore" class="keystore" value="' + item.id + '"></td>'+
 					'</tr>';
 			});
 			$("#certtable").append(str);
         },
         error : function(data) {
             alert("get all fail");
+        },
+    });
+}
+
+function createKeystore(){
+	var arr = [];
+	$('input.keystore:checkbox:checked').each(function () {
+	    arr.push($(this).val());
+	});
+	var d = {};
+	d.id_arr = arr;
+	d.name="test";
+	d.password="testpass";
+	$.ajax({
+        url : '/certificate/keystore',
+        type : 'post',
+        contentType : 'application/json',
+        data : JSON.stringify(d),
+        success : function(data) {
+            alert("uspeo");
+        },
+        error : function(data) {
+            alert("nije uspeo");
         },
     });
 }
