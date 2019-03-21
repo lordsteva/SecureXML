@@ -170,6 +170,11 @@ function addButtonListeners() {
 	$('#revokeCertificate').submit(function(e) {
 		revoke()
 	});
+
+	$('#formkeystoreid').submit(function(e) {
+	e.preventDefault();
+		createKeystore();
+	});
 }
 
 function revoke(id){
