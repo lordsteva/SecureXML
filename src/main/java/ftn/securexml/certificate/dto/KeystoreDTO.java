@@ -1,21 +1,24 @@
 package ftn.securexml.certificate.dto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class KeystoreDTO {
-	ArrayList id_arr = new ArrayList<Long>();
+	List<Long> id_arr = new ArrayList<Long>();
 	String name;
 	String password;
 	
 	public KeystoreDTO() {
 	}
 	
-	public ArrayList getId_arr() {
+	public List<Long> getId_arr() {
 		return id_arr;
 	}
-	public void setId_arr(ArrayList id_arr) {
+
+	public void setId_arr(List<Long> id_arr) {
 		this.id_arr = id_arr;
 	}
+
 	public String getName() {
 		return name;
 	}

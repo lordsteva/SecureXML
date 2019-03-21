@@ -26,6 +26,7 @@ import ft.securexml.certificate.keystores.KeyStoreWriter;
 import ftn.securexml.certificate.data.IssuerData;
 import ftn.securexml.certificate.data.SubjectData;
 import ftn.securexml.certificate.dto.CertificateDTO;
+import ftn.securexml.certificate.dto.KeystoreDTO;
 import ftn.securexml.certificate.generators.CertificateGenerator;
 import ftn.securexml.certificate.generators.KeyGenerator;
 import ftn.securexml.model.Certificate;
@@ -46,13 +47,24 @@ public class GenerateCertificateService {
 	private UserRepository userRepository;
 
 	public boolean createCertificate(CertificateDTO certificate, String token) {
-		
-		//validacija
+
+		// validacija
 		if (certificate.getCountry() == null || certificate.getState() == null || certificate.getLocalityName() == null
 				|| certificate.getOrganization() == null || certificate.getOrganizationalUnitName() == null
 				|| certificate.getCommonName() == null || certificate.getEmail() == null
 				|| certificate.getStartDate() == null || certificate.getEndDate() == null)
 			return false;
+
+		// validacija datuma
+		SimpleDateFormat iso8601Formater = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date startDate = iso8601Formater.parse(certificate.getStartDate());
+			Date endDate = iso8601Formater.parse(certificate.getEndDate());
+			if (startDate.after(endDate))
+				return false;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 		// pravim ovde par kljuceva jer ako je selfSigned jedino ovako mogu dobiti
 		// privatni kljuc za issuera
@@ -281,10 +293,11 @@ public class GenerateCertificateService {
 	public Boolean isDateOk(Long id) {
 		KeyStoreReader ksr = new KeyStoreReader();
 		X509Certificate c = (X509Certificate) ksr.readCertificate("appkeystore.jks", "mikimaus", id.toString());
-		Date start =  c.getNotBefore();
-		Date end =  c.getNotAfter();
+		Date start = c.getNotBefore();
+		Date end = c.getNotAfter();
 		System.out.println(Calendar.getInstance().getTime());
-		if(start.after(end) || start.after(Calendar.getInstance().getTime()) || end.before(Calendar.getInstance().getTime())) {
+		if (start.after(end) || start.after(Calendar.getInstance().getTime())
+				|| end.before(Calendar.getInstance().getTime())) {
 			return false;
 		}
 		return true;
@@ -296,11 +309,11 @@ public class GenerateCertificateService {
 		Long parentId = null;
 		try {
 			parentId = Long.valueOf(makeCertDTOFromCert(c).getIssuerId());
-		}catch (Exception e) {
+		} catch (Exception e) {
 			parentId = null;
 		}
-		if(parentId!=id) {
-			if(!isValid(parentId)) {
+		if (parentId != id) {
+			if (!isValid(parentId)) {
 				return false;
 			}
 		}
@@ -310,6 +323,28 @@ public class GenerateCertificateService {
 	public String revokedReason(Long id) {
 		Certificate c = certificateRepository.findByCertificateId(id);
 		return c.getRevokeReason();
+	}
+
+	public boolean createKeyStore(KeystoreDTO keystoreDTO) {
+
+		for (int i = 0; i < keystoreDTO.getId_arr().size(); i++) {
+			KeyStoreReader ksr = new KeyStoreReader();
+			X509Certificate cer = (X509Certificate) ksr.readCertificate("appkeystore.jks", "mikimaus",
+					keystoreDTO.getId_arr().get(i).toString());
+			PrivateKey privateKey = ksr.readPrivateKey("appkeystore.jks", "mikimaus",
+					keystoreDTO.getId_arr().get(i).toString(), "mikimaus");
+			// Snimanje sertifikata u keystore
+			KeyStoreWriter ksw = new KeyStoreWriter();
+			if (i == 0) {
+				ksw.loadKeyStore(null, null);
+			} else {
+				ksw.loadKeyStore(keystoreDTO.getName(), keystoreDTO.getPassword().toCharArray());
+			}
+			ksw.write(cer.getSerialNumber().toString(), privateKey, keystoreDTO.getPassword().toCharArray(), cer);
+			ksw.saveKeyStore(keystoreDTO.getName(), keystoreDTO.getPassword().toCharArray());
+		}
+
+		return true;
 	}
 
 }

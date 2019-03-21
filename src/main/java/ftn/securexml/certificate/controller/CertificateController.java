@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import antlr.collections.List;
 import ftn.securexml.certificate.dto.CertificateDTO;
 import ftn.securexml.certificate.dto.KeystoreDTO;
 import ftn.securexml.certificate.service.GenerateCertificateService;
@@ -106,7 +105,7 @@ public class CertificateController {
 	@PostMapping("/keystore")
 	public ResponseEntity<?> createKeystore(HttpServletRequest request,@RequestBody KeystoreDTO keystoreDTO)
 	{
-		System.out.println(keystoreDTO.getId_arr() + keystoreDTO.getName() + keystoreDTO.getPassword());
+		certificateService.createKeyStore(keystoreDTO);
 		return ResponseEntity.ok("ok");
 	}
 
