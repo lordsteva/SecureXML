@@ -1,10 +1,15 @@
 package ftn.securexml.certificate.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ftn.securexml.certificate.dto.CertificateDTO;
 import ftn.securexml.certificate.dto.KeystoreDTO;
+import ftn.securexml.certificate.service.DownloadService;
 import ftn.securexml.certificate.service.GenerateCertificateService;
 import ftn.securexml.security.TokenUtils;
 
@@ -25,6 +31,9 @@ public class CertificateController {
 	@Autowired
 	private GenerateCertificateService certificateService;
 
+	@Autowired
+	private DownloadService downloadService;
+	
 	@Autowired
 	private TokenUtils tokenUtils;
 	
@@ -108,5 +117,25 @@ public class CertificateController {
 		certificateService.createKeyStore(keystoreDTO);
 		return ResponseEntity.ok("ok");
 	}
+	
+	@GetMapping(value = "/download/{id}")
+	public void download(@PathVariable String id, HttpServletResponse response) throws IOException {
+		Long idd=Long.parseLong(id.split("/.")[0]);
+		certificateService.getById(idd.intValue());
+		String s;
+
+		s = downloadService.getPem(idd);
+		
+		byte[] ret= IOUtils.toByteArray(s);
+		response.setContentType("application/x-pem-file");
+
+		response.setContentLength(ret.length);//length in bytes
+		
+		response.setHeader("Content-Disposition", "attachment; filename="+idd+".crt"); 
+		//response.setHeader(“Content-Disposition”, “inline; filename=” + fileName);
+		
+        FileCopyUtils.copy(ret, response.getOutputStream());
+	}
+	
 
 }

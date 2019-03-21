@@ -20,13 +20,14 @@ const displayNodes=(data)=>{
 		node.level=1;
 		let parent=findParentNode(node)
 		parent=findNodeById(parent)
-		while(parent.level===undefined){
+		while(parent.level!=0){
 			parent=findParentNode(parent)
 			parent=findNodeById(parent)
+			node.level++
 		}
-		node.level+=parent.level
+		
 	})
-	 var options = initOptions()
+	let options = initOptions()
 	let config={nodes:new vis.DataSet(nodes),edges:new vis.DataSet(edges)}
 	let container = $('#nodes')[0]
 	let network = new vis.Network(container, config,options);
@@ -47,6 +48,8 @@ const displayNodes=(data)=>{
 		$('#nodeC').html(nodeData.country)
 		let flag=isRevoked(nodeData.id)
 		$('#nodeR').html(flag?'Yes':'No')
+		$('#nodeR').append('<button href="/certificate/download/'+ nodeData.id+'" download>klikni</button>')
+		 
 		if(!flag){
 			$('#nodeR').append('<hr/><textarea class="form-control"  id="reason"></textarea><button type="button" id="revokeBtn" class="btn btn-primary">Revoke</button>')
 			$('#revokeBtn').click(()=>{
@@ -55,8 +58,11 @@ const displayNodes=(data)=>{
 			        url : '/certificate/revoke/'+id,
 			        type : 'post',
 			        data:$('#reason').val(),
-			        success : data=>{alert('toast dodaj')}
-			        
+			        success : data=>{ 
+			        	init()
+			        	toastr.success('Certificate with ID: '+id+' revoked');
+			        }
+			       
 			    });
 			})
 		}
@@ -90,6 +96,8 @@ const createNode=data=> {
 	ret.id=data.id
 	ret.label=data.commonName
 	ret.issuer=data.issuerId
+	ret.physics=false
+	
 	//ret.shape='icon'
    /* ret.icon={
         face: 'FontAwesome',
@@ -98,9 +106,15 @@ const createNode=data=> {
         color: '#f0a30a'
       }
       */
+	
+	ret.shape= 'image'
+	if(!isRevoked(data.id))
+		ret.image= '/img/certificate.png'
+	else
+		ret.image= '/img/revoked.png'
 	if(data.id===ret.issuer)
 		ret.level=0
-	
+	//todo:isPastToday(data.endDate)
 	return ret
 }
 
@@ -120,6 +134,8 @@ const createEdge=(start,end)=> {
 	ret.from=start.id
 	ret.to=end.id 
 	ret.arrows='to'
+	ret.physics=false
+	ret.selectionWidth=0
 	return ret
 }
 
@@ -128,10 +144,36 @@ const init=()=>{
 	$.ajax({
 		url: '/certificate/getAll',
         type: 'get',
-        success: function (nodes) {
+        success (nodes) {
         	displayNodes(nodes)
      	}
 	});
 	
 }
+
+
+function getToken() {
+	return localStorage.getItem('jwtToken');
+}
+//salje token sa svakim zahtevom
+$(document).ajaxSend(function(event, jqxhr, settings) {
+	var token = getToken();
+	if(settings.url.includes('https'))
+		return;
+	if (token != null)
+		jqxhr.setRequestHeader('Authorization', 'Bearer ' + token);
+});
+
+//pokusava da produzi vreme trajanja tokena
+function refreshToken(){
+	if(getToken())
+	$.ajax({
+		   url: '/user/refresh',
+           type: 'post',
+           success: function (data) {
+        	   localStorage.setItem('jwtToken',data.accessToken);
+        	   }
+	});
+}
+
 $(document).ready(init)

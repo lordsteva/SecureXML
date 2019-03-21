@@ -71,8 +71,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			//TODO 
 			.antMatchers("/security/admin/**").hasRole("SYSTEM_ADMIN")
 
-			.antMatchers("/user/**").permitAll()
-
+			.antMatchers("/user/**").permitAll().
+			antMatchers("/certificate/download/**").permitAll()
 			// svaki zahtev mora biti autorizovan
 			.anyRequest().authenticated().and()
 			
