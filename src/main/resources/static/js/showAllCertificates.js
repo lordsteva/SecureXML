@@ -131,8 +131,8 @@ function createKeystore(){
 	});
 	var d = {};
 	d.id_arr = arr;
-	d.name="test";
-	d.password="testpass";
+	d.name=$("input[id='keystorename']").val();
+	d.password=$("input[id='keystorepass']").val();
 	$.ajax({
         url : '/certificate/keystore',
         type : 'post',
