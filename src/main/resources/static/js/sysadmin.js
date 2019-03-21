@@ -74,6 +74,10 @@ function addButtonListeners() {
 		window.location.href = "showAllCertificates.html"
 	});
 
+	$('#show_tree').click(function() {
+		window.location.href = "tree.html"
+	});
+
 }
 
 function adjust_body_offset() {

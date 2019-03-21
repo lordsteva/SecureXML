@@ -158,6 +158,10 @@ const init=()=>{
      	}
 	});
 	
+	$('#logoutlink').click(function() {
+		localStorage.setItem('jwtToken', null);
+		window.location.href = '/index.html';
+	});
 }
 
 
