@@ -128,7 +128,9 @@ public class GenerateCertificateService {
 			KeyStoreReader ksr = new KeyStoreReader();
 			X509Certificate cer = (X509Certificate) ksr.readCertificate("appkeystore.jks", "mikimaus",
 					allAlias.get(i).getCertificateId().toString());
-			retVal.add(makeCertDTOFromCert(cer));
+			if(isValid(Long.valueOf(makeCertDTOFromCert(cer).getIssuerId()))) {
+				retVal.add(makeCertDTOFromCert(cer));
+			}
 		}
 		return retVal;
 	}

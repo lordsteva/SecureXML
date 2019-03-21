@@ -143,7 +143,6 @@ function createKeystore(){
         contentType : 'application/json',
         data : JSON.stringify(d),
         success : function(data) {
-            alert("uspeo");
             let blob = new Blob([data], { type: 'application/jks' })
             let link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
@@ -190,7 +189,7 @@ function revoke(id){
         contentType : 'application/json',
         data : JSON.stringify(d),
         success : function(data) {
-			alert("sve ok");
+			window.location.reload(true);
 		},
         error : function(data) {
             alert("get1 fail");

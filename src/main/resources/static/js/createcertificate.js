@@ -99,6 +99,10 @@ function addButtonListeners() {
         d.email = $("input[id='email']").val();
         d.startDate = $("input[id='datefrom']").val();
         d.endDate = $("input[id='dateto']").val();
+        if(d.startDate > d.endDate){
+			alert("Dates not valid");
+			return;
+        }
         if($('#selfsigned').is(':checked')){
 			d.issuerId=null;
         }else{
@@ -115,10 +119,10 @@ function addButtonListeners() {
             contentType : 'application/json',
             data : JSON.stringify(d),
             success : function(data) {
-                alert("uspeo");
+                window.location.reload(true);
             },
             error : function(data) {
-                alert("nije uspeo");
+                alert("error");
             },
         });
     });
