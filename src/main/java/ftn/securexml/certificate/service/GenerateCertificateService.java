@@ -1,5 +1,12 @@
 package ftn.securexml.certificate.service;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -12,6 +19,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.stream.FileImageInputStream;
+import javax.servlet.http.HttpServletResponse;
+
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
@@ -20,6 +30,7 @@ import org.bouncycastle.asn1.x500.style.IETFUtils;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 
 import ft.securexml.certificate.keystores.KeyStoreReader;
 import ft.securexml.certificate.keystores.KeyStoreWriter;
@@ -325,7 +336,7 @@ public class GenerateCertificateService {
 		return c.getRevokeReason();
 	}
 
-	public boolean createKeyStore(KeystoreDTO keystoreDTO) {
+	public boolean createKeyStore(KeystoreDTO keystoreDTO, HttpServletResponse response) throws FileNotFoundException, IOException {
 
 		for (int i = 0; i < keystoreDTO.getId_arr().size(); i++) {
 			KeyStoreReader ksr = new KeyStoreReader();
@@ -333,6 +344,13 @@ public class GenerateCertificateService {
 					keystoreDTO.getId_arr().get(i).toString());
 			PrivateKey privateKey = ksr.readPrivateKey("appkeystore.jks", "mikimaus",
 					keystoreDTO.getId_arr().get(i).toString(), "mikimaus");
+			response.setContentType("application/x-jks-file");
+
+			
+			String f=keystoreDTO.getName();
+			if(!f.endsWith("/jks"))
+				f+=".jks";
+			response.setHeader("Content-Disposition", "attachment; filename="+f); 
 			// Snimanje sertifikata u keystore
 			KeyStoreWriter ksw = new KeyStoreWriter();
 			if (i == 0) {
@@ -342,6 +360,10 @@ public class GenerateCertificateService {
 			}
 			ksw.write(cer.getSerialNumber().toString(), privateKey, keystoreDTO.getPassword().toCharArray(), cer);
 			ksw.saveKeyStore(keystoreDTO.getName(), keystoreDTO.getPassword().toCharArray());
+			InputStream in=(new BufferedInputStream(new FileInputStream(keystoreDTO.getName())));
+			
+			FileCopyUtils.copy(in, response.getOutputStream());
+			//TODO jel treba da se brise .jks? ili da ostaje na serveru?
 		}
 
 		return true;

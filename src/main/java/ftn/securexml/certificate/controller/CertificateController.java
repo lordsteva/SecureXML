@@ -1,6 +1,10 @@
 package ftn.securexml.certificate.controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.KeyStore;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ft.securexml.certificate.keystores.KeyStoreWriter;
 import ftn.securexml.certificate.dto.CertificateDTO;
 import ftn.securexml.certificate.dto.KeystoreDTO;
 import ftn.securexml.certificate.service.DownloadService;
@@ -112,10 +117,10 @@ public class CertificateController {
 	}
 
 	@PostMapping("/keystore")
-	public ResponseEntity<?> createKeystore(HttpServletRequest request,@RequestBody KeystoreDTO keystoreDTO)
+	public void createKeystore(HttpServletResponse response,@RequestBody KeystoreDTO keystoreDTO) throws FileNotFoundException, IOException
 	{
-		certificateService.createKeyStore(keystoreDTO);
-		return ResponseEntity.ok("ok");
+		certificateService.createKeyStore(keystoreDTO,response);
+		//return ResponseEntity.ok("ok");
 	}
 	
 	@GetMapping(value = "/download/{id}")
@@ -133,9 +138,12 @@ public class CertificateController {
 		
 		response.setHeader("Content-Disposition", "attachment; filename="+idd+".crt"); 
 		//response.setHeader(“Content-Disposition”, “inline; filename=” + fileName);
-		
+		//TODO premesti u servis
         FileCopyUtils.copy(ret, response.getOutputStream());
 	}
-	
+	@PostMapping(value = "/download/")
+	public void downloadKS(@RequestBody Map<String,Object> data, HttpServletResponse response) throws IOException {
+		downloadService.downloadKS(data,response);
+	}
 
 }

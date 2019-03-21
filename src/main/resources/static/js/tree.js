@@ -36,7 +36,7 @@ const displayNodes=(data)=>{
         if(params.nodes.length===0)
         	return
         let nodeData=data.filter((d)=>d.id==params.nodes[0])[0]	
-		alert(JSON.stringify(nodeData))
+		//alert(JSON.stringify(nodeData))
 		$('#showNodeModal td').html('')
 		$('#nodeID').html(nodeData.id)
 		$('#nodeCN').html(nodeData.commonName)
@@ -48,8 +48,26 @@ const displayNodes=(data)=>{
 		$('#nodeC').html(nodeData.country)
 		let flag=isRevoked(nodeData.id)
 		$('#nodeR').html(flag?'Yes':'No')
-		$('#nodeR').append('<button href="/certificate/download/'+ nodeData.id+'" download>klikni</button>')
-		 
+		$('#downBtn').unbind('click')
+		$('#downBtn').click(()=>{
+			$.ajax({
+		        url : 'certificate/download/'+nodeData.id,
+		        type : 'get',
+		        success(data) {
+		            let blob = new Blob([data], { type: 'application/crt' })
+		            let link = document.createElement('a')
+		            link.href = window.URL.createObjectURL(blob)
+		            let fileName=nodeData.commonName
+		            fileName+='.crt'
+		            link.download = fileName
+		            document.body.appendChild(link)
+		            link.click()
+		            document.body.removeChild(link)
+		        }
+		        
+		    });
+			
+		})
 		if(!flag){
 			$('#nodeR').append('<hr/><textarea class="form-control"  id="reason"></textarea><button type="button" id="revokeBtn" class="btn btn-primary">Revoke</button>')
 			$('#revokeBtn').click(()=>{
@@ -60,7 +78,7 @@ const displayNodes=(data)=>{
 			        data:$('#reason').val(),
 			        success : data=>{ 
 			        	init()
-			        	toastr.success('Certificate with ID: '+id+' revoked');
+			        	toastr.success('Certificate with ID: '+id+' revoked')
 			        }
 			       
 			    });
@@ -86,7 +104,7 @@ const initOptions=()=>{
         navigationButtons: true,
         keyboard: true
       },
-      height: '500px'	 
+      height: (window.innerHeight - 75) + "px"	 
 	}
 	return ret
 }
@@ -97,15 +115,6 @@ const createNode=data=> {
 	ret.label=data.commonName
 	ret.issuer=data.issuerId
 	ret.physics=false
-	
-	//ret.shape='icon'
-   /* ret.icon={
-        face: 'FontAwesome',
-        code: '\uf1ad',
-        size: 50,
-        color: '#f0a30a'
-      }
-      */
 	
 	ret.shape= 'image'
 	if(!isRevoked(data.id))
@@ -152,16 +161,15 @@ const init=()=>{
 }
 
 
-function getToken() {
-	return localStorage.getItem('jwtToken');
-}
+const getToken=()=> localStorage.getItem('jwtToken')
+
 //salje token sa svakim zahtevom
-$(document).ajaxSend(function(event, jqxhr, settings) {
+$(document).ajaxSend((event, jqxhr, settings) =>{
 	var token = getToken();
 	if(settings.url.includes('https'))
 		return;
 	if (token != null)
-		jqxhr.setRequestHeader('Authorization', 'Bearer ' + token);
+		jqxhr.setRequestHeader('Authorization', 'Bearer ' + token)
 });
 
 //pokusava da produzi vreme trajanja tokena
@@ -172,7 +180,7 @@ function refreshToken(){
            type: 'post',
            success: function (data) {
         	   localStorage.setItem('jwtToken',data.accessToken);
-        	   }
+        }
 	});
 }
 

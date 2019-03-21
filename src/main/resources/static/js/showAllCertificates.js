@@ -140,6 +140,19 @@ function createKeystore(){
         data : JSON.stringify(d),
         success : function(data) {
             alert("uspeo");
+            let blob = new Blob([data], { type: 'application/jks' })
+            let link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            let fileName=d.name
+            if(!fileName.endsWith('.jks'))
+            	fileName+='.jks'
+            link.download = fileName;
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
         },
         error : function(data) {
             alert("nije uspeo");
