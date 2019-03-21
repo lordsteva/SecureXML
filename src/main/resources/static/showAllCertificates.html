@@ -66,23 +66,24 @@
 	<div class="modal fade" id="keystoreModal">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
-
-				<div class="modal-header">
-					<h4 class="modal-title">New keystore</h4>
-					<button type="button" class="close" data-dismiss="modal">×</button>
-				</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<label>Keystore name</label>
-						<input id="keystorename" type="text" class="form-control" placeholder="Enter keystore name" required>
-						<label>Password</label>
-						<input id="keystorepass" type="password" class="form-control" placeholder="Enter password" required>
+				<form name="formkeystore" id="formkeystoreid">
+					<div class="modal-header">
+						<h4 class="modal-title">New keystore</h4>
+						<button type="button" class="close" data-dismiss="modal">×</button>
 					</div>
-				</div>
-				<div class="modal-footer" id="modalFooter">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-					<button class="btn btn-primary" onclick="createKeystore()">Create</button>
-				</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label>Keystore name</label>
+							<input id="keystorename" type="text" class="form-control" placeholder="Enter keystore name" required>
+							<label>Password</label>
+							<input id="keystorepass" type="password" class="form-control" placeholder="Enter password" required>
+						</div>
+					</div>
+					<div class="modal-footer" id="modalFooter">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						<button class="btn btn-primary" type="submit" id="createkeystorebtn">Create</button>
+					</div>
+				<form>
 			</div>
 		</div>
 	</div>
