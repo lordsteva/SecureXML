@@ -262,7 +262,6 @@ public class GenerateCertificateService {
 
 			RDN subjectId = subjName.getRDNs(BCStyle.UNIQUE_IDENTIFIER)[0];
 			String subId = IETFUtils.valueToString(subjectId.getFirst().getValue());
-			cDTO.setIssuerId(subId);
 
 			RDN issuerId = iss.getRDNs(BCStyle.UNIQUE_IDENTIFIER)[0];
 			String issId = IETFUtils.valueToString(issuerId.getFirst().getValue());

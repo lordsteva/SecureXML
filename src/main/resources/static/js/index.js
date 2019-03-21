@@ -60,8 +60,19 @@ $(document).ready(function () {
 	});
 */
 	addButtonListeners();
-
-
+	if(getToken()=="null"){
+		$(".loggedIn").hide();
+		$(".notLoggedIn").show();
+	}
+	else{
+		$(".notLoggedIn").hide();
+		$(".loggedIn").show();
+	}
+	
+	$('#logoutlink').click(function() {
+		localStorage.setItem('jwtToken', null);
+		window.location.href = '/index.html';
+	});
 
 });
 

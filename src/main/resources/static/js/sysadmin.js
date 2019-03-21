@@ -44,6 +44,12 @@ $(document).ready(function () {
     });
 	setInterval(refreshToken, 60000); //svaki min
     addButtonListeners();
+    
+    $('#logoutlink').click(function() {
+		localStorage.setItem('jwtToken', null);
+		window.location.href = '/index.html';
+	});
+    
 });
 
 $(window).resize(adjust_body_offset);
