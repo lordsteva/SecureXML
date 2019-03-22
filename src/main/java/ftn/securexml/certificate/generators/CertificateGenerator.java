@@ -5,6 +5,9 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -19,7 +22,7 @@ import ftn.securexml.certificate.data.SubjectData;
 public class CertificateGenerator {
 	public CertificateGenerator() {}
 	
-	public X509Certificate generateCertificate(SubjectData subjectData, IssuerData issuerData) {
+	public X509Certificate generateCertificate(SubjectData subjectData, IssuerData issuerData, boolean isCa) {
 		try {
 			//Posto klasa za generisanje sertifiakta ne moze da primi direktno privatni kljuc pravi se builder za objekat
 			//Ovaj objekat sadrzi privatni kljuc izdavaoca sertifikata i koristiti se za potpisivanje sertifikata
@@ -38,6 +41,18 @@ public class CertificateGenerator {
 					subjectData.getEndDate(),
 					subjectData.getX500name(),
 					subjectData.getPublicKey());
+			
+		    if(isCa==true) {
+		    	// Basic Constraint
+			    BasicConstraints basicConstraints = new BasicConstraints(true); // <-- true for CA, false for EndEntity
+				certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, basicConstraints); // Basic Constraints is usually marked as critical.
+		    }
+		    else {
+		    	// Basic Constraint
+			    BasicConstraints basicConstraints = new BasicConstraints(false); // <-- true for CA, false for EndEntity
+				certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, basicConstraints); // Basic Constraints is usually marked as critical.
+		    }
+					
 			//Generise se sertifikat
 			X509CertificateHolder certHolder = certGen.build(contentSigner);
 
@@ -57,6 +72,9 @@ public class CertificateGenerator {
 		} catch (OperatorCreationException e) {
 			e.printStackTrace();
 		} catch (CertificateException e) {
+			e.printStackTrace();
+		} catch (CertIOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

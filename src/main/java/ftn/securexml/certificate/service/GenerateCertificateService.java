@@ -1,12 +1,10 @@
 package ftn.securexml.certificate.service;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -19,7 +17,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.imageio.stream.FileImageInputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.bouncycastle.asn1.x500.RDN;
@@ -109,8 +106,7 @@ public class GenerateCertificateService {
 
 		// Generise se sertifikat za subjekta, potpisan od strane issuer-a
 		CertificateGenerator cg = new CertificateGenerator();
-		X509Certificate cert = cg.generateCertificate(subjectData, issuerData);
-
+		X509Certificate cert = cg.generateCertificate(subjectData, issuerData, certificate.isCa());
 		// Snimanje sertifikata u keystore
 		KeyStoreWriter ksw = new KeyStoreWriter();
 		ksw.loadKeyStore("appkeystore.jks", "mikimaus".toCharArray());
@@ -123,13 +119,15 @@ public class GenerateCertificateService {
 
 	public List<CertificateDTO> getAllCa() {
 		List<CertificateDTO> retVal = new ArrayList<CertificateDTO>();
-		List<ftn.securexml.model.Certificate> allAlias = certificateRepository.findByIsCa(true);
+		List<ftn.securexml.model.Certificate> allAlias = certificateRepository.findAll();
 		for (int i = 0; i < allAlias.size(); i++) {
 			KeyStoreReader ksr = new KeyStoreReader();
 			X509Certificate cer = (X509Certificate) ksr.readCertificate("appkeystore.jks", "mikimaus",
 					allAlias.get(i).getCertificateId().toString());
-			if(isValid(Long.valueOf(makeCertDTOFromCert(cer).getIssuerId()))) {
-				retVal.add(makeCertDTOFromCert(cer));
+			if(cer.getBasicConstraints()!=-1) {
+				if(isValid(Long.valueOf(makeCertDTOFromCert(cer).getIssuerId()))) {
+					retVal.add(makeCertDTOFromCert(cer));
+				}
 			}
 		}
 		return retVal;
@@ -262,9 +260,6 @@ public class GenerateCertificateService {
 			String emname = IETFUtils.valueToString(en.getFirst().getValue());
 			cDTO.setEmail(emname);
 
-			RDN subjectId = subjName.getRDNs(BCStyle.UNIQUE_IDENTIFIER)[0];
-			String subId = IETFUtils.valueToString(subjectId.getFirst().getValue());
-
 			RDN issuerId = iss.getRDNs(BCStyle.UNIQUE_IDENTIFIER)[0];
 			String issId = IETFUtils.valueToString(issuerId.getFirst().getValue());
 			cDTO.setIssuerId(issId);
@@ -273,9 +268,13 @@ public class GenerateCertificateService {
 			cDTO.setStartDate(cert.getNotBefore().toString());
 			cDTO.setEndDate(cert.getNotAfter().toString());
 
-			ftn.securexml.model.Certificate certFromDB = certificateRepository
-					.findByCertificateId(Long.parseLong(subId));
-			cDTO.setCa(certFromDB.isCa());
+			if(cert.getBasicConstraints()!=-1) {
+				cDTO.setCa(true);
+			}
+			else {
+				cDTO.setCa(false);
+			}
+			
 			return cDTO;
 
 		} catch (CertificateEncodingException e) {
