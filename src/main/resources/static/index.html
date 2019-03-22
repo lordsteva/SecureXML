@@ -25,9 +25,8 @@
 		    <a style="color:gray;" class="navbar-brand">Mega travel</a>
 	    </div>
 	    <ul class="nav navbar-nav navbar-right">
-	      <li><button id="registerlink" id="refModalShow" data-toggle="modal" href="#registerModal" class="btn btn-primary notLoggedIn">Registruj se</button></li>
-		  <li><button id="loginlink" data-toggle="modal" href="#loginModal" class="btn btn-primary notLoggedIn">Prijavi se</button></li>
-	      <li><button id="logoutlink" data-toggle="modal" class="btn btn-primary loggedIn">Odjavi se</button></li>
+		  <li><button id="loginlink" data-toggle="modal" href="#loginModal" class="btn btn-primary notLoggedIn">Sign in</button></li>
+	      <li><button id="logoutlink" data-toggle="modal" class="btn btn-primary loggedIn">Sign out</button></li>
 	    </ul>
 	  </div>
 	</nav>		
@@ -49,29 +48,28 @@
 			<div class="modal-content">
 
 				<div class="modal-header">
-					<h4 class="modal-title">Uloguj se</h4>
+					<h4 class="modal-title">Sign in</h4>
 					<button type="button" class="close" data-dismiss="modal">×</button>
 				</div>
 				<div class="modal-body">
 					<form id="loginForm">
 						<div class="form-group">
-							<label for="username">Korisničko ime:</label> <input type="text"
+							<label for="username">Username:</label> <input type="text"
 								class="form-control" name="username" id="username">
 						</div>
 						<div class="form-group">
-							<label for="password">Lozinka:</label> <input type="password"
+							<label for="password">Password:</label> <input type="password"
 								class="form-control" id="password" name="password">
 						</div>
 
-						<button type="button" id="login" class="btn btn-primary">Uloguj
-							se</button>
+						<button type="button" id="login" class="btn btn-primary">Sign in</button>
 						<label style="display: none" id="btn-error" class="error"
 							for="login"></label>
 					</form>
 				</div>
 
 				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Zatvori</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 				</div>
 
 			</div>

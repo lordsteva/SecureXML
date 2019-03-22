@@ -134,6 +134,27 @@ function addButtonListeners() {
 	        $('#choose_issuer').show();
 	    }
 	});
+	
+	$('#create_cer').click(function() {
+        $.ajax({
+            url : '/certificate/create',
+            type : 'get',
+            success : function(data) {
+                window.location.href = data;
+            },
+            error : function(data) {
+                alert("nije uspeo");
+            },
+        });
+    });
+    
+    $('#show_all').click(function() {
+		window.location.href = "showAllCertificates.html"
+	});
+
+	$('#show_tree').click(function() {
+		window.location.href = "tree.html"
+	});
 }
 
 function adjust_body_offset() {

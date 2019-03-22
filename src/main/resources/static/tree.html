@@ -26,16 +26,20 @@
 	href="https://cdn.jsdelivr.net/npm/vis@4.21.0/dist/vis.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
+<link rel="stylesheet" href="/css/validation/screen.css">
 </head>
 <body style="background-color: #e9ebee;">
 	<nav class="navbar navbar-default navbar-expand-sm bg-dark navbar-dark fixed-top logged-out-navbar">
 	  <div class="container-fluid">
-	    <div class="navbar-header">
-	      <a style="color:gray;" class="navbar-brand">Mega travel</a>
-	       </div>
+	    
+	    <ul class="nav navbar-nav navbar-left">
+	    	<a style="color:gray;" class="navbar-brand">Mega travel</a>
+	      	<li><button type="button" class="btn btn-primary" id="create_cer">Create certificate</button></li>
+			<li><button type="button" class="btn btn-primary" id="show_all">Show all certificates</button></li>
+			<li><button type="button" class="btn btn-primary" id="show_tree">Show tree</button></li>
+	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
-	      <li><button id="logoutlink" data-toggle="modal" class="btn btn-primary loggedIn">Odjavi se</button></li>
+	      <li><button id="logoutlink" data-toggle="modal" class="btn btn-primary loggedIn">Sign out</button></li>
 	    </ul>
 	  </div>
 	</nav>

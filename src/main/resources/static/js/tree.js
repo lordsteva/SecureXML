@@ -83,9 +83,19 @@ const displayNodes=(data)=>{
 			       
 			    });
 			})
+		} else{
+			let id=$('#nodeID').html()
+			$.ajax({
+		        url : '/certificate/revokedReason/'+id,
+		        type : 'get',
+		        success : data=>{ 
+		        	$('#nodeR').append(' ('+JSON.parse(data).reason+')')
+		        }
+		       
+		    });
 		}
-		$('#nodeEnd').html(nodeData.startDate)
-		$('#nodeStart').html(nodeData.endDate)
+		$('#nodeEnd').html(nodeData.endDate)
+		$('#nodeStart').html(nodeData.startDate)
 	//	let issuer=findNodeById() mrzi me dadodajem ovo xD
 		$('#showNodeModal').trigger('click')
         //showModal()
@@ -118,12 +128,16 @@ const createNode=data=> {
 	
 	ret.shape= 'image'
 	if(!isRevoked(data.id))
-		ret.image= '/img/certificate.png'
+		if(!isPastToday(data.endDate))
+			ret.image= '/img/certificate.png'
+		else
+			ret.image= '/img/expired.png'
+
 	else
 		ret.image= '/img/revoked.png'
 	if(data.id===ret.issuer)
 		ret.level=0
-	//todo:isPastToday(data.endDate)
+	
 	return ret
 }
 
@@ -162,6 +176,27 @@ const init=()=>{
 		localStorage.setItem('jwtToken', null);
 		window.location.href = '/index.html';
 	});
+	
+	$('#create_cer').click(function() {
+        $.ajax({
+            url : '/certificate/create',
+            type : 'get',
+            success : function(data) {
+                window.location.href = data;
+            },
+            error : function(data) {
+                alert("nije uspeo");
+            },
+        });
+    });
+    
+    $('#show_all').click(function() {
+		window.location.href = "showAllCertificates.html"
+	});
+
+	$('#show_tree').click(function() {
+		window.location.href = "tree.html"
+	});
 }
 
 
@@ -186,6 +221,13 @@ function refreshToken(){
         	   localStorage.setItem('jwtToken',data.accessToken);
         }
 	});
+}
+
+const isPastToday=(date)=>{
+	let today=new Date()
+	let x=date.split(' ')
+	let d=new Date(x[1]+' '+x[2]+' '+x[5])
+	return d<today
 }
 
 $(document).ready(init)
