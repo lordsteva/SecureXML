@@ -83,6 +83,16 @@ const displayNodes=(data)=>{
 			       
 			    });
 			})
+		} else{
+			let id=$('#nodeID').html()
+			$.ajax({
+		        url : '/certificate/revokedReason/'+id,
+		        type : 'get',
+		        success : data=>{ 
+		        	$('#nodeR').append(' ('+JSON.parse(data).reason+')')
+		        }
+		       
+		    });
 		}
 		$('#nodeEnd').html(nodeData.startDate)
 		$('#nodeStart').html(nodeData.endDate)
@@ -118,12 +128,16 @@ const createNode=data=> {
 	
 	ret.shape= 'image'
 	if(!isRevoked(data.id))
-		ret.image= '/img/certificate.png'
+		if(!isPastToday(data.endDate))
+			ret.image= '/img/certificate.png'
+		else
+			ret.image= '/img/expired.png'
+
 	else
 		ret.image= '/img/revoked.png'
 	if(data.id===ret.issuer)
 		ret.level=0
-	//todo:isPastToday(data.endDate)
+	
 	return ret
 }
 
@@ -186,6 +200,13 @@ function refreshToken(){
         	   localStorage.setItem('jwtToken',data.accessToken);
         }
 	});
+}
+
+const isPastToday=(date)=>{
+	let today=new Date()
+	let x=date.split(' ')
+	let d=new Date(x[1]+' '+x[2]+' '+x[5])
+	return d<today
 }
 
 $(document).ready(init)
