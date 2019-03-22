@@ -94,8 +94,8 @@ const displayNodes=(data)=>{
 		       
 		    });
 		}
-		$('#nodeEnd').html(nodeData.startDate)
-		$('#nodeStart').html(nodeData.endDate)
+		$('#nodeEnd').html(nodeData.endDate)
+		$('#nodeStart').html(nodeData.startDate)
 	//	let issuer=findNodeById() mrzi me dadodajem ovo xD
 		$('#showNodeModal').trigger('click')
         //showModal()
