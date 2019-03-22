@@ -41,7 +41,7 @@ public class MainController {
         if (user != null) {
             List<Authority> li = (List<Authority>) user.getAuthorities();
             if (li.get(0).getName().equals("ROLE_SYSTEM_ADMIN"))
-            	return new ModelAndView("redirect:" + "sysadmin.html");
+            	return new ModelAndView("redirect:" + "showAllCertificates.html");
             
           /*  System.out.println(li.get(0).getName() + " <-----------");
             if (li.get(0).getName().equals("ROLE_RENT_A_CAR_ADMIN"))
