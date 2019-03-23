@@ -80,7 +80,7 @@ public class GenerateCertificateService {
 		KeyPair keyPairSubject = kg.generateKeys();
 
 		// ubacivanje u bazu napravljenog sertifikata
-		ftn.securexml.model.Certificate c = new ftn.securexml.model.Certificate(certificate.isCa());
+		ftn.securexml.model.Certificate c = new ftn.securexml.model.Certificate();
 		certificateRepository.save(c);
 
 		// Serijski broj sertifikata
@@ -363,7 +363,6 @@ public class GenerateCertificateService {
 			InputStream in=(new BufferedInputStream(new FileInputStream(keystoreDTO.getName())));
 			
 			FileCopyUtils.copy(in, response.getOutputStream());
-			//TODO jel treba da se brise .jks? ili da ostaje na serveru?
 		}
 
 		return true;

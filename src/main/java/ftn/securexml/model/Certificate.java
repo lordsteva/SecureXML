@@ -22,11 +22,8 @@ public class Certificate {
 	@Column(nullable = true)
 	private String revokeReason;
 
+	
 	public Certificate() {
-
-	}
-
-	public Certificate(boolean isCa) {
 		super();
 		this.revoked = false;
 	}
