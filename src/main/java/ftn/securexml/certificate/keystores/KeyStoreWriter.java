@@ -32,7 +32,7 @@ public class KeyStoreWriter {
   }
   
   public void loadKeyStore(String fileName, char[] password) {
-    fileName="+fileName;
+   
     try {
       File f=new File(fileName);
       if(fileName != null && f.exists()) {
@@ -54,7 +54,7 @@ public class KeyStoreWriter {
   }
   
   public void saveKeyStore(String fileName, char[] password) {
-    fileName=fileName;
+   
     try {
       File f=new File(fileName);
       f.createNewFile();
