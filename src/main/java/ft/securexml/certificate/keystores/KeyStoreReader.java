@@ -49,7 +49,7 @@ public class KeyStoreReader {
 	public IssuerData readIssuerFromStore(String keyStoreFile, String alias, char[] password, char[] keyPass) {
 		try {
 			//Datoteka se ucitava
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream(keyStoreFile));
+			BufferedInputStream in = new BufferedInputStream(new FileInputStream("./src/main/resources/"+keyStoreFile));
 			keyStore.load(in, password);
 			//Iscitava se sertifikat koji ima dati alias
 			Certificate cert = keyStore.getCertificate(alias);
@@ -82,7 +82,7 @@ public class KeyStoreReader {
 			//kreiramo instancu KeyStore
 			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
 			//ucitavamo podatke
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream(keyStoreFile));
+			BufferedInputStream in = new BufferedInputStream(new FileInputStream("./src/main/resources/"+keyStoreFile));
 			ks.load(in, keyStorePass.toCharArray());
 			
 			if(ks.isKeyEntry(alias)) {
