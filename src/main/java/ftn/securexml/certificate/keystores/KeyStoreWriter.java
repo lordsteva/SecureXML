@@ -1,4 +1,4 @@
-package ft.securexml.certificate.keystores;
+package ftn.securexml.certificate.keystores;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,7 +33,7 @@ public class KeyStoreWriter {
   
   public void loadKeyStore(String fileName, char[] password) {
     try {
-      File f=new File("./src/main/resources/"+fileName);
+      File f=new File(fileName);
       if(fileName != null && f.exists()) {
         
         keyStore.load(new FileInputStream(f), password);
@@ -54,7 +54,7 @@ public class KeyStoreWriter {
   
   public void saveKeyStore(String fileName, char[] password) {
     try {
-      File f=new File("./src/main/resources/"+fileName);
+      File f=new File(fileName);
      
       keyStore.store(new FileOutputStream(f), password);
     } catch (KeyStoreException e) {

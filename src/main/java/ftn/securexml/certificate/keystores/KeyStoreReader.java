@@ -1,9 +1,10 @@
-package ft.securexml.certificate.keystores;
+package ftn.securexml.certificate.keystores;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -49,8 +50,10 @@ public class KeyStoreReader {
 	public IssuerData readIssuerFromStore(String keyStoreFile, String alias, char[] password, char[] keyPass) {
 		try {
 			//Datoteka se ucitava
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream("./src/main/resources/"+keyStoreFile));
-			keyStore.load(in, password);
+		  ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+      InputStream is = classloader.getResourceAsStream(keyStoreFile);
+      BufferedInputStream in = new BufferedInputStream(is);
+      keyStore.load(in, password);
 			//Iscitava se sertifikat koji ima dati alias
 			Certificate cert = keyStore.getCertificate(alias);
 			//Iscitava se privatni kljuc vezan za javni kljuc koji se nalazi na sertifikatu sa datim aliasom
@@ -82,7 +85,9 @@ public class KeyStoreReader {
 			//kreiramo instancu KeyStore
 			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
 			//ucitavamo podatke
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream("./src/main/resources/"+keyStoreFile));
+			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+			InputStream is = classloader.getResourceAsStream(keyStoreFile);
+			BufferedInputStream in = new BufferedInputStream(is);
 			ks.load(in, keyStorePass.toCharArray());
 			
 			if(ks.isKeyEntry(alias)) {

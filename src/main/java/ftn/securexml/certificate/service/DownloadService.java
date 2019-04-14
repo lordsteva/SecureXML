@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import ft.securexml.certificate.keystores.KeyStoreReader;
-import ft.securexml.certificate.keystores.KeyStoreWriter;
+import ftn.securexml.certificate.keystores.KeyStoreReader;
+import ftn.securexml.certificate.keystores.KeyStoreWriter;
 import ftn.securexml.repository.CertificateRepository;
 
 

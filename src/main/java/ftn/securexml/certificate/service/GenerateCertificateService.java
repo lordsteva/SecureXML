@@ -29,14 +29,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import ft.securexml.certificate.keystores.KeyStoreReader;
-import ft.securexml.certificate.keystores.KeyStoreWriter;
 import ftn.securexml.certificate.data.IssuerData;
 import ftn.securexml.certificate.data.SubjectData;
 import ftn.securexml.certificate.dto.CertificateDTO;
 import ftn.securexml.certificate.dto.KeystoreDTO;
 import ftn.securexml.certificate.generators.CertificateGenerator;
 import ftn.securexml.certificate.generators.KeyGenerator;
+import ftn.securexml.certificate.keystores.KeyStoreReader;
+import ftn.securexml.certificate.keystores.KeyStoreWriter;
 import ftn.securexml.model.Certificate;
 import ftn.securexml.model.User;
 import ftn.securexml.repository.UserRepository;
